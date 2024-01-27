@@ -1,5 +1,8 @@
 # ak-check-in
-A system used for a gym to display who has checked in
+
+A system used for a gym to display who has checked in.
+
+AK stands for [Artillery Kai](https://www.artillerykai.co.uk), the first gym that will be using this app.
 
 ## Available Scripts
 
