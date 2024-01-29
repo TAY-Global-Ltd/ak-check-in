@@ -11,7 +11,6 @@ const App = () => {
         <img src="ak-logo.png" className="logo" alt="logo" />
         <h3>🤼‍♂️ {currentClass}</h3>
       </header>
-
       <UsersTable />
       <footer className="footer">
         <Timer />
