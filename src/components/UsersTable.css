@@ -8,16 +8,8 @@
   gap: 20px 30px;
 }
 
-@media only screen and (min-width: 1024px) {
-  /* Styles specific to desktop screens */
-  .wrapper {
-    font-size: 24px;
-    gap: 20px 30px;
-  }
-
-  .users-table {
-    min-width: 240px;
-  }
+.users-table {
+  min-width: 240px;
 }
 
 .users-table {
@@ -28,7 +20,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 14px rgba(15, 220, 18, 0.251);
+  box-shadow: 0 0 6px #abb1ac40;
 }
 
 .checked {
@@ -37,4 +29,21 @@
 
 .unChecked {
   opacity: 0.3;
+}
+
+.check-mark {
+  color: green;
+}
+
+@media only screen and (max-width: 600px) {
+  .users-table {
+    width: 70%;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .wrapper {
+    font-size: 18px;
+    gap: 20px 30px;
+  }
 }
