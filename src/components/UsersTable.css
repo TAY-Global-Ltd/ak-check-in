@@ -1,0 +1,40 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+  min-height: 60vh;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 20px 30px;
+}
+
+@media only screen and (min-width: 1024px) {
+  /* Styles specific to desktop screens */
+  .wrapper {
+    font-size: 24px;
+    gap: 20px 30px;
+  }
+
+  .users-table {
+    min-width: 240px;
+  }
+}
+
+.users-table {
+  width: 180px;
+  background-color: #222222;
+  border-radius: 6px;
+  padding: 0 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 14px rgba(15, 220, 18, 0.251);
+}
+
+.checked {
+  opacity: 1;
+}
+
+.unChecked {
+  opacity: 0.3;
+}

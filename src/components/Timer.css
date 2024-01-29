@@ -1,0 +1,20 @@
+.timer-container {
+    margin: 50px 0;
+}
+
+.clock {
+    margin: 0;
+    padding-bottom: 12px;
+    font-size: large;
+}
+
+.next-class {
+    margin: 0;
+}
+
+@media only screen and (min-width: 1024px) {
+    /* Styles specific to desktop screens */
+    .timer-container {
+        margin: 0;
+    }
+  }

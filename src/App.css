@@ -1,38 +1,37 @@
 .App {
   text-align: center;
+  padding: 0 60px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.footer {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+ 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.logo { 
+  width: 160px;
+}
+
+@media only screen and (min-width: 1024px) {
+  /* Styles specific to desktop screens */
+  .App-header { 
+    margin-top: 50px;
   }
+
+  .footer {
+    padding-bottom: 20px;
+  }
+
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  width: 100%;
+  font-family: "Nova Square", display;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
