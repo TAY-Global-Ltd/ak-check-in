@@ -1,0 +1,44 @@
+[
+    {
+        "name": "John Smith",
+        "icon": "person_check",
+        "icon_type": "material",
+        "reward": "⭐"
+    },
+    {
+        "name": "Peter Parker",
+        "icon": "person_check",
+        "icon_type": "material",
+        "reward": ""
+    },
+    {
+        "name": "Uzumaki Naruto",
+        "icon": "person",
+        "icon_type": "material",
+        "reward": ""
+    },
+    {
+        "name": "Midoriya Izuku",
+        "icon": "person_check",
+        "icon_type": "material",
+        "reward": "⭐⭐⭐"
+    },
+    {
+        "name": "Bob Marley",
+        "icon": "person_check",
+        "icon_type": "material",
+        "reward": ""
+    },
+    {
+        "name": "Roger Gracie",
+        "icon": "person_check",
+        "icon_type": "material",
+        "reward": "🥋"
+    },
+    {
+        "name": "Sombat Banchamek",
+        "icon": "person_check",
+        "icon_type": "material",
+        "reward": "🥊"
+    }
+]
