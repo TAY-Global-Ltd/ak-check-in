@@ -1,0 +1,21 @@
+# Logo Processing
+
+A convenient tool to downsize logo.
+
+Generally we want to keep the full size logo and use this to get a good size for the UI.
+
+## Install
+
+pip install -r requirements.txt
+
+## Example
+
+See ``resize.py`` which generates various resolutions
+(feel free to add a resolution that works best on the screen).
+
+We can then copy the desired size like this:
+
+```
+cp logos/ak-logo-480x480.png ../../public/ak-logo.png
+```
+
