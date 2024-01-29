@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 ## Storing the keys
 
-As a good practice, we're not going to store the in git up.
+As a good practice, we're not going to store the in GitHub.
 Even locally we don't want to leave it as plain text.
 We're going to encrypt it instead.
 
