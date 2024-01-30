@@ -1,2 +1,4 @@
 pubnub
 cryptography
+uvicorn
+fastapi
