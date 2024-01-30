@@ -69,3 +69,5 @@ if __name__ == '__main__':
     mock_sub = MockSubscribeCallback(fixture_name='mock_fixture1', interval=5)
     pubnub.add_listener(mock_sub)
     pubnub.subscribe().channels('dev-checkin').execute()
+    import time
+    time.sleep(60)
