@@ -1,44 +1,96 @@
-[
-    {
-        "name": "John Smith",
-        "icon": "person_check",
-        "icon_type": "material",
-        "reward": "⭐"
+{
+    "settings": {
+        "theme": "default",
+        "display_mode": "dark"
     },
-    {
-        "name": "Peter Parker",
-        "icon": "person_check",
-        "icon_type": "material",
-        "reward": ""
+    "events": {
+        "event-1": {
+            "id": "event-1",
+            "title": "BJJ",
+            "description": "BJJ Fundamentals",
+            "start_time": "18:00",
+            "end_time": "19:30",
+            "icon": "bjj",
+            "icon_type": "internal"
+        },
+        "event-2": {
+            "id": "event-2",
+            "title": "Muay Thai",
+            "description": "Muay Thai",
+            "start_time": "19:30",
+            "end_time": "21:00",
+            "icon": "muay_thai",
+            "icon_type": "internal"
+        }
     },
-    {
-        "name": "Uzumaki Naruto",
-        "icon": "person",
-        "icon_type": "material",
-        "reward": ""
+    "initial_state": [
+        {
+            "event_id": "event-1",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": ""
+        },
+        {
+            "event_id": "event-1",
+            "name": "Will Turner",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": ""
+        }
+    ],
+    "message_settings": {
+        "interval": 5
     },
-    {
-        "name": "Midoriya Izuku",
-        "icon": "person_check",
-        "icon_type": "material",
-        "reward": "⭐⭐⭐"
-    },
-    {
-        "name": "Bob Marley",
-        "icon": "person_check",
-        "icon_type": "material",
-        "reward": ""
-    },
-    {
-        "name": "Roger Gracie",
-        "icon": "person_check",
-        "icon_type": "material",
-        "reward": "🥋"
-    },
-    {
-        "name": "Sombat Banchamek",
-        "icon": "person_check",
-        "icon_type": "material",
-        "reward": "🥊"
-    }
-]
+    "messages": [
+        {
+            "event_id": "event-1",
+            "name": "John Smith",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "⭐"
+        },
+        {
+            "event_id": "event-1",
+            "name": "Peter Parker",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": ""
+        },
+        {
+            "event_id": "event-1",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": ""
+        },
+        {
+            "event_id": "event-1",
+            "name": "Midoriya Izuku",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "⭐⭐⭐"
+        },
+        {
+            "event_id": "event-1",
+            "name": "Bob Marley",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": ""
+        },
+        {
+            "event_id": "event-1",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋"
+        },
+        {
+            "event_id": "event-2",
+            "name": "Sombat Banchamek",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥊"
+        }
+    ]
+}
