@@ -25,9 +25,10 @@ const isCheckedIn = true;
 const UsersTable = () => {
   return (
     <div className="wrapper">
-      {students40.map((user) => {
+      {students40.map((user, index) => {
         return (
           <div
+            key={index}
             className={`users-table ${isCheckedIn ? "checked" : "unChecked"}`}
           >
             <p>
