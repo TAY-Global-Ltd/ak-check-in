@@ -8,7 +8,7 @@ Generally we want to keep the full size logo and use this to get a good size for
 
 pip install -r requirements.txt
 
-## Example
+## Resizing
 
 See ``resize.py`` which generates various resolutions
 (feel free to add a resolution that works best on the screen).
@@ -19,3 +19,12 @@ We can then copy the desired size like this:
 cp logos/ak-logo-480x480.png ../../public/ak-logo.png
 ```
 
+## Favicon
+
+Use ``favivon.py`` to generate favicon,ico and ``resize`` for other dimensions.
+
+```
+cp logos/favicon.ico ../../public/
+cp logos/ak-logo-192x192.png ../../public/logo192.png
+cp logos/ak-logo-512x512.png ../../public/logo512.png
+```
