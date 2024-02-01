@@ -14,9 +14,9 @@ const Clock = () => {
   const formattedTime = currentTime.toLocaleTimeString();
 
   return (
-      <h1 className="clock-header">
+      <h3 className="clock-header">
         <strong>{formattedTime}</strong>
-      </h1>
+      </h3>
   );
 };
 

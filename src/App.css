@@ -2,40 +2,44 @@
   text-align: center;
 }
 
-.footer {
-  text-align: center;
-  width: 100%;
-  margin: 0 auto;
-  background-color: #222222;
-}
-
 .logo {
-  width: 160px;
+  width: 100px;
 }
 
-.App-header h3 {
+.m-12 {
   margin: 12px;
 }
 
 .App-header {
-  width: 100%;
   font-family: "Nova Square", display;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  padding: 0 60px;
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
   background-color: #222222;
-  margin-bottom: 30px;
+  margin-bottom: 80px;
   border-bottom: 1px solid #abb1ac40;
 }
 
-@media only screen and (min-width: 1024px) {
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media only screen and (min-width: 960px) {
   .App-header {
     padding-top: 20px;
   }
+}
 
-  .footer {
-    padding-bottom: 20px;
+@media only screen and (max-width: 620px) {
+  .logo-container {
+    display: none;
+  }
+
+  .App-header {
+   justify-content: center;
   }
 }
