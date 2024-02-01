@@ -18,12 +18,12 @@ const studentsExample = [
     name: "Will Turner",
     icon: "person_check",
     icon_type: "material",
-    reward: "",
+    reward: "⭐⭐⭐",
   },
   {
     event_id: "event-0",
     name: "John Smith",
-    icon: "person_check",
+    icon: "person",
     icon_type: "material",
     reward: "⭐",
   },
@@ -32,14 +32,14 @@ const studentsExample = [
     name: "Peter Parker",
     icon: "person_check",
     icon_type: "material",
-    reward: "",
+    reward: "🥊",
   },
   {
     event_id: "event-0",
     name: "Uzumaki Naruto",
     icon: "person",
     icon_type: "material",
-    reward: "",
+    reward: "🥋",
   },
 ];
 
