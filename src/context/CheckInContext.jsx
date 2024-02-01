@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
 import { getCheckInData } from "../services/getCheckInData";
-import Loader from '../components/Loader'
+import Loader from "../components/Loader";
 
 const CheckInContext = createContext();
 
@@ -15,6 +15,7 @@ const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
 
   pubnub.addListener({
     message: function (event) {
+      // TODO invalidate checkInData query
       console.log("~~~ event", event.message);
     },
     presence: function (presenceEvent) {
@@ -48,6 +49,8 @@ const CheckInProvider = ({ children }) => {
 
   useEffect(() => {
     if (checkInData) {
+      console.log("~~~ checkInData", checkInData.attendees);
+
       const subInfo = checkInData.subscription_info;
       subscribeToUpdates(
         subInfo.channel,
@@ -59,17 +62,19 @@ const CheckInProvider = ({ children }) => {
   });
 
   if (isLoading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   if (error) {
     return <p>Error: {error.message}</p>;
   }
 
+  const students = checkInData.attendees;
+
   return (
     <CheckInContext.Provider
       value={{
-        checkInData,
+        students,
       }}
     >
       {children}
