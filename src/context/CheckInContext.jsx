@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
 import { getCheckInData } from "../services/getCheckInData";
+import Loader from '../components/Loader'
 
 const CheckInContext = createContext();
 
@@ -58,7 +59,7 @@ const CheckInProvider = ({ children }) => {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loader/>;
   }
 
   if (error) {
