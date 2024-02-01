@@ -2,14 +2,15 @@ import { useCheckInContext } from "../context/CheckInContext";
 import UsersTable from "./UsersTable";
 import Timer from "./Timer";
 import Clock from "./Clock";
+import Modal from "./Modal";
 import { countCheckedInStudents } from "../utils/studentSorting";
 
 const currentClass = "🤼‍♂️  BJJ with Jack";
 
 const CheckInPage = () => {
-  const { checkInData } = useCheckInContext();
+  const { students } = useCheckInContext();
 
-  const { checkedIn, signedUp } = countCheckedInStudents(checkInData.attendees);
+  const { checkedIn, signedUp } = countCheckedInStudents(students);
 
   return (
     <div className="App">
@@ -28,6 +29,7 @@ const CheckInPage = () => {
         </div>
       </header>
       <main>
+        <Modal/>
         <UsersTable />
       </main>
     </div>

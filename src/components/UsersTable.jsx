@@ -1,13 +1,12 @@
 import "./UsersTable.css";
 import { useCheckInContext } from "../context/CheckInContext";
 import { sortStudentsByCheckInStatus } from "../utils/studentSorting";
-import { students } from "../__mocks__/students";
 
 
 
 const UsersTable = () => {
-  const { checkInData } = useCheckInContext();
-  const sortedStudents = sortStudentsByCheckInStatus(checkInData.attendees);
+  const { students } = useCheckInContext();
+  const sortedStudents = sortStudentsByCheckInStatus(students);
 
   return (
     <div className="wrapper">
