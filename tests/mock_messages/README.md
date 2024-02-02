@@ -59,7 +59,7 @@ curl http://127.0.0.1:8765/initial_state
 Example output: 
 
 ```
-{"subscription_info":{"subscribe_key":"sub-c-08cc7ea1-02ad-4c5d-8b44-5325568e63a7","user_id":"my_custom_user_id","channel":"dev-checkin"},"current_event":{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"bjj","icon_type":"internal"},"next_event":{"id":"event-2","title":"Muay Thai","description":"Muay Thai","start_time":"19:30","end_time":"21:00","icon":"muay_thai","icon_type":"inter...}
+{"subscription_info":{"subscribe_key":"sub-c-XXXXXXXXXXXX","user_id":"my_custom_user_id","channel":"dev-checkin"},"current_event":{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"bjj","icon_type":"internal"},"next_event":{"id":"event-2","title":"Muay Thai","description":"Muay Thai","start_time":"19:30","end_time":"21:00","icon":"muay_thai","icon_type":"inter...}
 ```
 
 ### Get Event By ID
