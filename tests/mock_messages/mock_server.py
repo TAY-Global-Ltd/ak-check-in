@@ -33,7 +33,17 @@ message_history = []
 
 @app.get("/event")
 def event(event_id: str):
-    return fixture['events'][event_id]
+    return next(x for x in fixture['events'] if x['id'] == event_id)
+
+
+@app.get("/current_event")
+def current_event():
+    return fixture['events'][0]
+
+
+@app.get("/next_event")
+def next_event():
+    return fixture['events'][1]
 
 
 @app.get("/initial_state")
@@ -44,6 +54,8 @@ def initial_state():
             "user_id": USER_ID,
             "channel": CHANNEL,
         },
+        "current_event": fixture['events'][0],
+        "next_event": fixture['events'][1],
         "attendees": fixture['initial_state'] + message_history,
     }
 

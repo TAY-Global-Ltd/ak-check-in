@@ -48,6 +48,8 @@ They run the script below
 python mock_server.py
 ```
 
+### Initial State
+
 To get the initial state. This represent the current state of the screen used when the UI first initialises. 
 
 ```
@@ -57,8 +59,10 @@ curl http://127.0.0.1:8765/initial_state
 Example output: 
 
 ```
-[{"event_id":"event-1","name":"Jack Sparrow","icon":"person_check","icon_type":"material","reward":""},{"event_id":"event-1","name":"Will Turner","icon":"person_check","icon_type":"material","reward":""}] 
+{"subscription_info":{"subscribe_key":"sub-c-08cc7ea1-02ad-4c5d-8b44-5325568e63a7","user_id":"my_custom_user_id","channel":"dev-checkin"},"current_event":{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"bjj","icon_type":"internal"},"next_event":{"id":"event-2","title":"Muay Thai","description":"Muay Thai","start_time":"19:30","end_time":"21:00","icon":"muay_thai","icon_type":"inter...}
 ```
+
+### Get Event By ID
 
 As we can see above, check ins are associated with events. The UI can request information about the event.
 
@@ -78,3 +82,32 @@ The below are example outputs in the terminal of messages being publishes on int
 
 The ``initial_state`` request will include additional check ins if the UI requests for it
 (i.e. refreshing the webpage).
+
+
+### Get Current Event
+
+To get the event of the current class
+
+```
+curl http://127.0.0.1:8765/current_event
+```
+
+Example Output:
+
+```
+{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"bjj","icon_type":"internal"} 
+```
+
+### Get Next Event
+
+To get the event of the current class
+
+```
+curl http://127.0.0.1:8765/next_event
+```
+
+Example Output:
+
+```
+{"id":"event-2","title":"Muay Thai","description":"Muay Thai","start_time":"19:30","end_time":"21:00","icon":"muay_thai","icon_type":"internal"} 
+```

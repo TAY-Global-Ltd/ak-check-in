@@ -3,8 +3,8 @@
         "theme": "default",
         "display_mode": "dark"
     },
-    "events": {
-        "event-1": {
+    "events": [
+        {
             "id": "event-1",
             "title": "BJJ",
             "description": "BJJ Fundamentals",
@@ -13,7 +13,7 @@
             "icon": "bjj",
             "icon_type": "internal"
         },
-        "event-2": {
+        {
             "id": "event-2",
             "title": "Muay Thai",
             "description": "Muay Thai",
@@ -22,7 +22,7 @@
             "icon": "muay_thai",
             "icon_type": "internal"
         }
-    },
+    ],
     "initial_state": [
         {
             "event_id": "event-1",
