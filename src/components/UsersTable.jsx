@@ -24,8 +24,10 @@ const UsersTable = () => {
             >
               {student.icon}
             </span>
-            <p>{student.name}</p>
-            <p>{student.reward}</p>
+            <div className="name-wrapper">
+              <p className="reward">{student.reward}</p>
+              <p className="name">{student.name}</p>
+            </div>
           </div>
         );
       })}
