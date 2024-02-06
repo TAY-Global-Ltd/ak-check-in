@@ -1,3 +1,9 @@
+@keyframes fadeInOut {
+  0% { opacity: 0; } /* Start with opacity 0 */
+  50% { opacity: 1; } /* Halfway through the animation, opacity is 1 */
+  100% { opacity: 0; } /* End with opacity 0 */
+}
+
 .modal-overlay {
     display: none;
     position: fixed;
@@ -9,6 +15,12 @@
     justify-content: center;
     align-items: center;
     z-index: 999;
+    animation: fadeInOut 3s ease forwards; /* Apply the animation */
+    opacity: 0.3; /* Start with opacity 0 */
+  }
+  
+  .visible {
+    opacity: 1; /* Change opacity to 1 when modal is visible */
   }
   
   .modal-content {
