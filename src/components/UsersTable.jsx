@@ -1,17 +1,15 @@
 import "./UsersTable.css";
 import { useCheckInContext } from "../context/CheckInContext";
-import { sortStudentsByCheckInStatus } from "../utils/studentSorting";
-
-
+import { filterStudentsByClass } from "../utils/studentSorting";
 
 const UsersTable = () => {
-  const { students } = useCheckInContext();
-  const sortedStudents = sortStudentsByCheckInStatus(students);
+  const { students, currentClassData } = useCheckInContext();
+  const filteredStudents = filterStudentsByClass(students, currentClassData.id);
 
   return (
     <div className="wrapper">
-      {sortedStudents.map((student, index) => {
-        const isStudentCheckedIn = student.event_id === "event-1";
+      {filteredStudents.map((student, index) => {
+        const isStudentCheckedIn = student.event_id === currentClassData.id;
         const style = `${student.icon_type}-symbols-outlined`;
         return (
           <div

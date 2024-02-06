@@ -2,7 +2,11 @@ import { createContext, useContext, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
-import { getCheckInData } from "../services/getCheckInData";
+import {
+  getCheckInData,
+  getCurrentClassData,
+  getNextClassData,
+} from "../services/getCheckInData";
 import Loader from "../components/Loader";
 
 const CheckInContext = createContext();
@@ -47,10 +51,21 @@ const CheckInProvider = ({ children }) => {
     queryFn: getCheckInData,
   });
 
+  const { data: currentClassData, isLoading: currentClassIsLoading } = useQuery(
+    {
+      queryKey: ["CurrentClassData"],
+      queryFn: getCurrentClassData,
+    }
+  );
+
+  const { data: nextClassData, isLoading: nextClassIsLoading } = useQuery({
+    queryKey: ["NextClassData"],
+    queryFn: getNextClassData,
+  });
+
   useEffect(() => {
     if (checkInData) {
-      console.log("~~~ checkInData", checkInData.attendees);
-
+        console.log('~~~ checkInData', checkInData.attendees)
       const subInfo = checkInData.subscription_info;
       subscribeToUpdates(
         subInfo.channel,
@@ -61,7 +76,7 @@ const CheckInProvider = ({ children }) => {
     }
   });
 
-  if (isLoading) {
+  if (isLoading || currentClassIsLoading || nextClassIsLoading) {
     return <Loader />;
   }
 
@@ -75,6 +90,8 @@ const CheckInProvider = ({ children }) => {
     <CheckInContext.Provider
       value={{
         students,
+        nextClassData,
+        currentClassData,
       }}
     >
       {children}

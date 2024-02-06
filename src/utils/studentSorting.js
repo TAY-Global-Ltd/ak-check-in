@@ -1,23 +1,22 @@
-export function sortStudentsByCheckInStatus(students) {
-  const checkedInStudents = students.filter((student) => student.event_id === 'event-1');
-  const notCheckedInStudents = students.filter((student) => student.event_id !== 'event-1');
-
-  const sortedStudents = notCheckedInStudents.concat(checkedInStudents);
-
-  return sortedStudents;
+export function filterStudentsByClass(students, id) {
+  return students.filter((student) => student.event_id === id);
 }
 
-export function countCheckedInStudents(students) {
-  const counts = students.reduce((accumulator, student) => {
-    if (student.event_id === 'event-1') {
-      accumulator.checkedIn += 1;
+// TODO update once issue #25 is closed
+export function countCheckedStatus(students) {
+  let checkedCount = 0;
+  let uncheckedCount = 0;
+
+  students.forEach((student) => {
+    if (student.status === "checkedIn") {
+      checkedCount++;
+    } else if (student.status === "signedUp") {
+      uncheckedCount++;
     }
+  });
 
-    accumulator.signedUp += 1;
-
-    return accumulator;
-  }, { checkedIn: 0, signedUp: 0 });
-
-  const { checkedIn, signedUp } = counts;
-  return { checkedIn, signedUp };
+  return {
+    checkedIn: checkedCount,
+    signedUp: uncheckedCount,
+  };
 }

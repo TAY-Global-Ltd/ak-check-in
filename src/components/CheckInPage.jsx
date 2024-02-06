@@ -1,26 +1,31 @@
 import { useCheckInContext } from "../context/CheckInContext";
 import UsersTable from "./UsersTable";
-import Timer from "./Timer";
+import NextClass from "./NextClass";
 import Clock from "./Clock";
 import Modal from "./Modal";
-import { countCheckedInStudents } from "../utils/studentSorting";
+import { filterStudentsByClass } from "../utils/studentSorting";
 
 const currentClass = "🤼‍♂️  BJJ with Jack";
 
 const CheckInPage = () => {
-  const { students } = useCheckInContext();
+  const { students, currentClassData } = useCheckInContext();
+  const { title, description, icon, icon_type, id } = currentClassData;
+  const filteredStudents = filterStudentsByClass(students, id);
 
-  const { checkedIn, signedUp } = countCheckedInStudents(students);
+  const style = `${icon_type}-symbols-outlined`;
 
   return (
     <div className="App">
       <header className="App-header">
-        <Timer />
+        <NextClass />
         <div>
-          <h3 className="m-12">{currentClass}</h3>
+          <h3 className="m-12">
+            <span className={style}>{icon}</span> {title}
+          </h3>
+          <p>{description}</p>
           <p>
-            Signed up: <strong>{signedUp}</strong> / Checked in:{" "}
-            <strong>{checkedIn}</strong>
+            Signed up: <strong>{filteredStudents.length}</strong> / Checked in:{" "}
+            <strong>{filteredStudents.length}</strong>
           </p>
         </div>
         <div className="logo-container">
@@ -29,7 +34,7 @@ const CheckInPage = () => {
         </div>
       </header>
       <main>
-        <Modal/>
+        <Modal />
         <UsersTable />
       </main>
     </div>
