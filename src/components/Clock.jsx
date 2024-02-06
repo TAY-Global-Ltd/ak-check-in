@@ -1,3 +1,4 @@
+import '../App.css'
 import React, { useState, useEffect } from "react";
 
 const Clock = () => {
@@ -14,9 +15,10 @@ const Clock = () => {
   const formattedTime = currentTime.toLocaleTimeString();
 
   return (
-      <h3 className="clock-header">
-        <strong>{formattedTime}</strong>
-      </h3>
+    <div className="logo-container">
+      <img src="logo192.png" className="logo" alt="ak-logo" />
+      <strong>{formattedTime}</strong>
+    </div>
   );
 };
 
