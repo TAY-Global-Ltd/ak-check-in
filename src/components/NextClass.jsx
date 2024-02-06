@@ -1,6 +1,7 @@
 import "./NextClass.css";
 import { useCheckInContext } from "../context/CheckInContext";
 import { filterStudentsByClass } from "../utils/studentSorting";
+import Clock from "./Clock";
 
 const NextClass = () => {
   const { nextClassData, students } = useCheckInContext();
@@ -10,13 +11,22 @@ const NextClass = () => {
 
   return (
     <div className="next-class-container">
-      <p>
-        <strong>
-          <span className={style}>{icon}</span> {title}
-        </strong>
-      </p>
-      <p>Checked in: {filteredStudents.length}</p>
-      <p>starts at {start_time}</p>
+      <div className="clock-container">
+        <Clock />
+      </div>
+      <div className="next-class box">
+        <p>
+          <strong>
+            {/* <span className={style}>{icon}</span>  */}
+            🇹🇭 {title}
+          </strong>
+          <span> is next</span>
+          <br />
+          Checked in: {filteredStudents.length}
+          <br />
+          starts at {start_time}
+        </p>
+      </div>
     </div>
   );
 };
