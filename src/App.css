@@ -1,6 +1,12 @@
 .App {
   text-align: center;
+  height: 100vh;
+  background-image: url('../public/ak-background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
+
+
 
 .logo {
   max-width: 100px;
