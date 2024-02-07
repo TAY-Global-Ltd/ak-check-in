@@ -95,8 +95,20 @@ curl http://127.0.0.1:8765/current_event
 Example Output:
 
 ```
-{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"bjj","icon_type":"internal"} 
+  "id": "event-1",
+  "title": "BJJ",
+  "description": "BJJ Fundamentals",
+  "start_time": "18:00",
+  "end_time": "19:30",
+  "icon_type": "url",
+  "icon": "http://127.0.0.1:8765/static/images/bjj.png"
+}
 ```
+
+Notice the ``icon_type`` is ``url`` so the icon is a valid URL where the icon is served.
+You can go ahead and open the below URL to see the icon.
+
+http://127.0.0.1:8765/static/images/bjj.png
 
 ### Get Next Event
 

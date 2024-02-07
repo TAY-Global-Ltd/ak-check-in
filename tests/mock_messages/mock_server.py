@@ -7,6 +7,7 @@ import json
 from crypto import get_secret
 from send_messages import MockSubscribeCallback
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 CHANNEL = "dev-checkin"
 SUBSCRIBE_KEY = get_secret('PUB_NUB_SUBSCRIBE_KEY')
@@ -44,6 +45,9 @@ def current_event():
 @app.get("/next_event")
 def next_event():
     return fixture['events'][1]
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/initial_state")
