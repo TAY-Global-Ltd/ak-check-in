@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
 import {
@@ -21,7 +21,6 @@ export const useCheckInContext = () => {
 
 const CheckInProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
-  const queryClient = useQueryClient();
 
   const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
     const pubnub = new PubNub({
@@ -32,9 +31,6 @@ const CheckInProvider = ({ children }) => {
     pubnub.addListener({
       message: function (event) {
         setMessage(event.message);
-        queryClient.invalidateQueries({
-          queryKey: ["CheckInData"],
-        });
       },
     });
 
@@ -67,7 +63,6 @@ const CheckInProvider = ({ children }) => {
 
   useEffect(() => {
     if (checkInData) {
-      console.log("~~~ checkInData", checkInData.attendees);
       const subInfo = checkInData.subscription_info;
       subscribeToUpdates(
         subInfo.channel,
@@ -76,7 +71,7 @@ const CheckInProvider = ({ children }) => {
       );
       document.title = "AK Attendance";
     }
-  });
+  }, [checkInData]);
 
   if (isLoading || currentClassIsLoading || nextClassIsLoading) {
     return <Loader />;

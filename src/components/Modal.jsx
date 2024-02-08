@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import "./Modal.css";
 import {
   greetingsArray,
@@ -8,37 +9,48 @@ import {
 import { getRandomElement } from "../utils/modalCopies";
 import { useCheckInContext } from "../context/CheckInContext";
 
-const greeting = getRandomElement(greetingsArray);
-const emoji = getRandomElement(emojies);
-const summary = getRandomElement(checkedInPhrases);
-
 const Modal = () => {
   const { message } = useCheckInContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  console.log("~~~ message", message);
+  const [newMessage, setNewMessage] = useState(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (message) {
+    if (message && message !== newMessage) {
+      setNewMessage(message);
+    }
+  }, [message]);
+
+  useEffect(() => {
+    if (newMessage) {
       setIsModalVisible(true);
 
       const timeoutId = setTimeout(() => {
         setIsModalVisible(false);
+        queryClient.invalidateQueries(["CheckInData"]);
       }, 3000);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [message]);
+  }, [newMessage, queryClient]);
+
+  const greeting = getRandomElement(greetingsArray);
+  const emoji = getRandomElement(emojies);
+  const summary = getRandomElement(checkedInPhrases);
 
   return (
     <div className={`modal-overlay ${isModalVisible ? "visible" : ""}`}>
       <div className="modal-content">
         <h1>{greeting}</h1>
-        <p>{message?.reward}</p>
-        <h1>{message?.name}</h1>
-        <h1>
+        {newMessage && (
+          <>
+            <p>{newMessage.reward}</p>
+            <h1 className="student-name">{newMessage.name}</h1>
+          </>
+        )}
+        <h2>
           {summary} {emoji}
-        </h1>
+        </h2>
       </div>
     </div>
   );
