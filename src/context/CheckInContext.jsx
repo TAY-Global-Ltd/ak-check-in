@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
@@ -11,28 +11,6 @@ import Loader from "../components/Loader";
 
 const CheckInContext = createContext();
 
-const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
-  const pubnub = new PubNub({
-    subscribeKey: subscribeKey,
-    uuid: uuid,
-  });
-
-  pubnub.addListener({
-    message: function (event) {
-      // TODO invalidate checkInData query
-      console.log("~~~ event", event.message);
-    },
-    presence: function (presenceEvent) {
-      console.log("~~~ Presence Event:", presenceEvent);
-    },
-  });
-
-  pubnub.subscribe({
-    channels: [channel],
-    withPresence: true,
-  });
-};
-
 export const useCheckInContext = () => {
   const context = useContext(CheckInContext);
   if (context === undefined) {
@@ -42,6 +20,26 @@ export const useCheckInContext = () => {
 };
 
 const CheckInProvider = ({ children }) => {
+  const [message, setMessage] = useState(null);
+
+  const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
+    const pubnub = new PubNub({
+      subscribeKey: subscribeKey,
+      uuid: uuid,
+    });
+
+    pubnub.addListener({
+      message: function (event) {
+        setMessage(event.message);
+      },
+    });
+
+    pubnub.subscribe({
+      channels: [channel],
+      withPresence: true,
+    });
+  };
+
   const {
     data: checkInData,
     isLoading,
@@ -65,7 +63,6 @@ const CheckInProvider = ({ children }) => {
 
   useEffect(() => {
     if (checkInData) {
-        console.log('~~~ checkInData', checkInData.attendees)
       const subInfo = checkInData.subscription_info;
       subscribeToUpdates(
         subInfo.channel,
@@ -74,7 +71,7 @@ const CheckInProvider = ({ children }) => {
       );
       document.title = "AK Attendance";
     }
-  });
+  }, [checkInData]);
 
   if (isLoading || currentClassIsLoading || nextClassIsLoading) {
     return <Loader />;
@@ -92,6 +89,7 @@ const CheckInProvider = ({ children }) => {
         students,
         nextClassData,
         currentClassData,
+        message,
       }}
     >
       {children}

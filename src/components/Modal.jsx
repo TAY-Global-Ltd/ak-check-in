@@ -1,30 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { greetingsArray, emojies, checkedInPhrases } from "../constants/constants";
-import { getRandomElement } from "../utils/modalCopies";
-
+import { useQueryClient } from "@tanstack/react-query";
 import "./Modal.css";
-
-const greeting = getRandomElement(greetingsArray);
-const emoji = getRandomElement(emojies);
-const summary = getRandomElement(checkedInPhrases);
+import {
+  greetingsArray,
+  emojies,
+  checkedInPhrases,
+} from "../constants/constants";
+import { getRandomElement } from "../utils/modalCopies";
+import { useCheckInContext } from "../context/CheckInContext";
 
 const Modal = () => {
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const { message } = useCheckInContext();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [newMessage, setNewMessage] = useState(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setIsModalVisible(false);
-    }, 2000);
+    if (message && message !== newMessage) {
+      setNewMessage(message);
+    }
+  }, [message]);
 
-    return () => clearTimeout(timeoutId);
-  }, []);
+  useEffect(() => {
+    if (newMessage) {
+      setIsModalVisible(true);
+
+      const timeoutId = setTimeout(() => {
+        setIsModalVisible(false);
+        queryClient.invalidateQueries(["CheckInData"]);
+      }, 3000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [newMessage, queryClient]);
+
+  const greeting = getRandomElement(greetingsArray);
+  const emoji = getRandomElement(emojies);
+  const summary = getRandomElement(checkedInPhrases);
 
   return (
     <div className={`modal-overlay ${isModalVisible ? "visible" : ""}`}>
       <div className="modal-content">
         <h1>{greeting}</h1>
-        <h1>Jack Sparrow</h1>
-        <h1>{summary} {emoji}</h1>
+        {newMessage && (
+          <>
+            <p>{newMessage.reward}</p>
+            <h1 className="student-name">{newMessage.name}</h1>
+          </>
+        )}
+        <h2>
+          {summary} {emoji}
+        </h2>
       </div>
     </div>
   );
