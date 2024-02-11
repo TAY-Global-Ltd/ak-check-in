@@ -5,7 +5,7 @@ import Clock from "./Clock";
 
 const NextClass = () => {
   const { nextClassData, students, lightMode } = useCheckInContext();
-  const { start_time, title, id } = nextClassData;
+  const { start_time, title, id, icon } = nextClassData;
   const filteredStudents = filterStudentsByClass(students, id);
 
   return (
@@ -20,8 +20,9 @@ const NextClass = () => {
           lightMode ? "light-box-shadow" : "dark-box-shadow"
         }`}
       >
-        <p>
-          <strong>🇹🇭 {title}</strong>
+        <img src={icon} style={{width: '30px'}} alt="next class icon" />
+        <p style={{margin: '6px'}}>
+          <strong>{title}</strong>
           <span> is next</span>
           <br />
           Checked in: {filteredStudents.length}
