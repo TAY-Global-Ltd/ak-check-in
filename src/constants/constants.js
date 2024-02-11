@@ -22,6 +22,3 @@ export const checkedInPhrases = [
   "You are ready to rock ",
   "Checked in was successful ",
 ];
-
-export const baseUrl = 'http://127.0.0.1:8765/'
-

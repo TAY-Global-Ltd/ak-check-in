@@ -1,0 +1,31 @@
+.light-bg-secondary {
+  background-color: var(--background-light-secondary);
+}
+
+.dark-bg-secondary {
+  background-color: var(--background-dark-secondary);
+}
+
+.light-bg-primary {
+  background-color: var(--background-light-primary);
+}
+
+.dark-bg-primary {
+  background-color: var(--background-dark-primary);
+}
+
+.light-font {
+  color: var(--text-dark);
+}
+
+.dark-font {
+  color: var(--text-light);
+}
+
+.light-box-shadow {
+  box-shadow: 0 0 6px var(--box-shadow-light);
+}
+
+.dark-box-shadow {
+  box-shadow: 0 0 6px var(--box-shadow-dark);
+}

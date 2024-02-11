@@ -3,9 +3,10 @@
   width: 90%;
   flex-wrap: wrap;
   justify-content: center;
-  align-content: center;
+  align-content: center; 
   gap: 20px 30px;
   margin: 0 auto;
+  padding-bottom: 20px;
 }
 
 .users-table {
@@ -32,13 +33,11 @@
 
 .users-table {
   width: 180px;
-  background-color: #222222;
   border-radius: 6px;
   padding: 0 12px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  box-shadow: 0 0 6px #abb1ac40;
 }
 
 .checked {

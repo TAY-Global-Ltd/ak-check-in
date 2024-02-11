@@ -1,9 +1,10 @@
 import "./UsersTable.css";
 import { useCheckInContext } from "../context/CheckInContext";
 import { filterStudentsByClass } from "../utils/studentSorting";
+import Toggle from "./Toggle";
 
 const UsersTable = () => {
-  const { students, currentClassData } = useCheckInContext();
+  const { students, currentClassData, lightMode } = useCheckInContext();
   const filteredStudents = filterStudentsByClass(students, currentClassData.id);
 
   return (
@@ -16,7 +17,10 @@ const UsersTable = () => {
             key={index}
             className={`users-table ${
               isStudentCheckedIn ? "checked" : "unChecked"
-            }`}
+            } ${lightMode ? "light-bg-secondary" : "dark-bg-secondary"} ${
+              lightMode ? "light-box-shadow" : "dark-box-shadow"
+            }
+            `}
           >
             <span
               className={style}
@@ -31,6 +35,7 @@ const UsersTable = () => {
           </div>
         );
       })}
+      <Toggle />
     </div>
   );
 };

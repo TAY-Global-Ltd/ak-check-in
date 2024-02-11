@@ -10,7 +10,7 @@ import { getRandomElement } from "../utils/modalCopies";
 import { useCheckInContext } from "../context/CheckInContext";
 
 const Modal = () => {
-  const { message } = useCheckInContext();
+  const { message, lightMode } = useCheckInContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newMessage, setNewMessage] = useState(null);
   const queryClient = useQueryClient();
@@ -39,8 +39,16 @@ const Modal = () => {
   const summary = getRandomElement(checkedInPhrases);
 
   return (
-    <div className={`modal-overlay ${isModalVisible ? "visible" : ""}`}>
-      <div className="modal-content">
+    <div
+      className={`modal-overlay ${isModalVisible ? "visible" : ""} ${
+        lightMode ? "light-bg-primary" : "dark-bg-primary"
+      }`}
+    >
+      <div
+        className={`modal-content ${
+          lightMode ? "light-bg-secondary" : "dark-bg-secondary"
+        } ${lightMode ? "light-box-shadow" : "dark-box-shadow"}`}
+      >
         <h1>{greeting}</h1>
         {newMessage && (
           <>
