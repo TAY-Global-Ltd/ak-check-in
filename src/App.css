@@ -1,12 +1,11 @@
 .App {
   text-align: center;
   height: 100vh;
-  background-image: url('../public/ak-background.png');
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
+  background-attachment: fixed,
+
 }
-
-
 
 .logo {
   max-width: 100px;
@@ -19,9 +18,8 @@
   padding: 40px 60px 0 60px;
   justify-content: space-between;
   font-size: calc(10px + 2vmin);
-  background-color: #222222;
   margin-bottom: 80px;
-  border-bottom: 1px solid #abb1ac40;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .logo-container {
@@ -29,17 +27,19 @@
   flex-direction: column;
   align-items: center;
   font-size: 20px;
-  box-shadow: 0 0 6px #abb1ac40;
-  background-color: #1d1d1d;
   padding: 0 30px 12px 30px;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 720px) {
   .App-header {
     justify-content: center;
     flex-direction: column-reverse;
     align-items: center;
-    padding: 0;
+    padding: 20px 0 0 0;
+  }
+
+  .App {
+    height: auto;
   }
 
   .box {

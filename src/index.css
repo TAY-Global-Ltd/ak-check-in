@@ -1,8 +1,21 @@
+:root {
+  --background-light-primary: #ffffff;
+  --background-light-secondary: #e3e1e1;
+  --text-dark: #333333;
+
+  --background-dark-primary: #1d1d1d;
+  --background-dark-secondary: #222222;
+  --text-light: #ffffff;
+
+  --box-shadow-dark: #abb1ac40;
+  --box-shadow-light: #4e4e4eec;
+  --border-color: #abb1ac40;
+}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: "Open Sans", sans-serif;
-  background-color: #1d1d1d;
-  color: white;
+  color: var(--text-light);
 }

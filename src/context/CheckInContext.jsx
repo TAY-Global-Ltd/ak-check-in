@@ -21,6 +21,7 @@ export const useCheckInContext = () => {
 
 const CheckInProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
+  const [lightMode, setLightMode] = useState(false);
 
   const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
     const pubnub = new PubNub({
@@ -83,6 +84,11 @@ const CheckInProvider = ({ children }) => {
 
   const students = checkInData.attendees;
 
+  // Theme toggle
+  const toggleTheme = () => {
+    setLightMode((prevMode) => !prevMode);
+  };
+
   return (
     <CheckInContext.Provider
       value={{
@@ -90,6 +96,8 @@ const CheckInProvider = ({ children }) => {
         nextClassData,
         currentClassData,
         message,
+        lightMode,
+        toggleTheme,
       }}
     >
       {children}

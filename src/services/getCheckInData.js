@@ -1,4 +1,4 @@
-import { baseUrl } from "../constants/constants";
+const baseUrl = process.env.REACT_APP_HOST_URL || 'http://127.0.0.1'
 
 const responseHandler = async (url) => {
   const res = await fetch(`${baseUrl}${url}`);
@@ -14,7 +14,7 @@ const responseHandler = async (url) => {
 };
 
 export const getCheckInData = async () => {
-  const checkInData = responseHandler("initial_state").then((data) => data);
+  const checkInData = responseHandler("initial_state").then((data) => data); 
   return checkInData;
 };
 
