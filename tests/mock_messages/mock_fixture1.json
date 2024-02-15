@@ -26,17 +26,39 @@
     "initial_state": [
         {
             "event_id": "event-1",
+            "user-id": "user0001",
             "name": "Jack Sparrow",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": ""
+            "reward": "",
+            "status": "signedup"
         },
         {
             "event_id": "event-1",
+            "user-id": "user0002",
             "name": "Will Turner",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": ""
+            "reward": "",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0008",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋",
+            "status": "signedup"
         }
     ],
     "message_settings": {
@@ -45,52 +67,75 @@
     "messages": [
         {
             "event_id": "event-1",
+            "user-id": "user0003",
             "name": "John Smith",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": "⭐"
+            "reward": "⭐",
+            "status": "checkedin"
         },
         {
             "event_id": "event-1",
+            "user-id": "user0004",
             "name": "Peter Parker",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": ""
+            "reward": "",
+            "status": "signedup"
         },
         {
             "event_id": "event-1",
+            "user-id": "user0005",
             "name": "Uzumaki Naruto",
             "icon": "person",
             "icon_type": "material",
-            "reward": ""
+            "reward": "",
+            "status": "checkedin"
         },
         {
             "event_id": "event-1",
+            "user-id": "user0006",
             "name": "Midoriya Izuku",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": "⭐⭐⭐"
+            "reward": "⭐⭐⭐",
+            "status": "checkedin"
         },
         {
             "event_id": "event-1",
+            "user-id": "user0007",
             "name": "Bob Marley",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": ""
+            "reward": "",
+            "status": "checkedin"
         },
         {
             "event_id": "event-1",
+            "user-id": "user0008",
             "name": "Roger Gracie",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": "🥋"
+            "reward": "🥋",
+            "status": "checkedin"
         },
         {
             "event_id": "event-2",
+            "user-id": "user0009",
             "name": "Sombat Banchamek",
             "icon": "person_check",
             "icon_type": "material",
-            "reward": "🥊"
+            "reward": "🥊",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0001",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "cancelled"
         }
     ]
 }
