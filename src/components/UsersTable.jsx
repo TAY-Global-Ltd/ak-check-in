@@ -7,9 +7,9 @@ import {
 import Toggle from "./Toggle";
 
 const UsersTable = () => {
-  const { checkInData, currentClassData, lightMode } = useCheckInContext();
+  const { students, currentClassData, lightMode } = useCheckInContext();
   const currentClassStudents = filterStudentsByClass(
-    checkInData?.attendees,
+    students,
     currentClassData?.id
   );
   const { attendees } = checkStudentsStatus(currentClassStudents);

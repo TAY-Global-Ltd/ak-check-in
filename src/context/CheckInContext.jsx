@@ -80,12 +80,26 @@ const CheckInProvider = ({ children }) => {
     }
   }, [checkInData]);
 
+  const mockData = [
+    {
+      event_id: "event-1",
+      "user-id": "user0004",
+      name: "Peter Parker",
+      icon: "person_check",
+      icon_type: "material",
+      reward: "",
+      status: "checkedin",
+    },
+  ];
+
+  const students = checkInData ? checkInData.attendees : mockData;
+
   if (checkInIsLoading || currentClassIsLoading || nextClassIsLoading) {
     return <Loader />;
   }
 
   if (checkInError || currentClassError || nextClassError) {
-    console.log('~~~ error', checkInError)
+    console.log("~~~ error", checkInError);
     return (
       <p>
         Error fetching data:{" "}
@@ -104,7 +118,7 @@ const CheckInProvider = ({ children }) => {
   return (
     <CheckInContext.Provider
       value={{
-        checkInData,
+        students,
         nextClassData,
         currentClassData,
         message,
