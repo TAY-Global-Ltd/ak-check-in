@@ -19,9 +19,9 @@ const Clock = () => {
   return (
     <div
       className={`logo-container ${
-        lightMode ? "light-bg-primary" : "dark-bg-primary"
-      } ${
-        lightMode ? "light-box-shadow" : "dark-box-shadow"
+        lightMode
+          ? "light-bg-primary light-box-shadow"
+          : "dark-bg-primary dark-box-shadow"
       }`}
     >
       <img src="logo192.png" className="logo" alt="ak-logo" />

@@ -1,11 +1,19 @@
 import "./CurrentClass.css";
 import { useCheckInContext } from "../context/CheckInContext";
-import { filterStudentsByClass } from "../utils/studentSorting";
+import {
+  filterStudentsByClass,
+  checkStudentsStatus,
+} from "../utils/studentSorting";
 
 const CurrentClass = () => {
-  const { students, currentClassData } = useCheckInContext();
+  const { checkInData, currentClassData } = useCheckInContext();
+
   const { title, description, icon, id } = currentClassData;
-  const filteredStudents = filterStudentsByClass(students, id);
+  const currentClassStudents = filterStudentsByClass(
+    checkInData?.attendees,
+    id
+  );
+  const { checkedIn, signedUp } = checkStudentsStatus(currentClassStudents);
 
   return (
     <div className="current-class-container box">
@@ -15,8 +23,8 @@ const CurrentClass = () => {
       </div>
       <p>{description}</p>
       <p>
-        Signed up: <strong>{filteredStudents.length}</strong> / Checked in:{" "}
-        <strong>{filteredStudents.length}</strong>
+        Signed up: <strong>{signedUp.length}</strong> / Checked in:{" "}
+        <strong>{checkedIn.length}</strong>
       </p>
     </div>
   );

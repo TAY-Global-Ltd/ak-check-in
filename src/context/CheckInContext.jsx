@@ -43,21 +43,27 @@ const CheckInProvider = ({ children }) => {
 
   const {
     data: checkInData,
-    isLoading,
-    error,
+    isLoading: checkInIsLoading,
+    error: checkInError,
   } = useQuery({
     queryKey: ["CheckInData"],
     queryFn: getCheckInData,
   });
 
-  const { data: currentClassData, isLoading: currentClassIsLoading } = useQuery(
-    {
-      queryKey: ["CurrentClassData"],
-      queryFn: getCurrentClassData,
-    }
-  );
+  const {
+    data: currentClassData,
+    isLoading: currentClassIsLoading,
+    error: currentClassError,
+  } = useQuery({
+    queryKey: ["CurrentClassData"],
+    queryFn: getCurrentClassData,
+  });
 
-  const { data: nextClassData, isLoading: nextClassIsLoading } = useQuery({
+  const {
+    data: nextClassData,
+    isLoading: nextClassIsLoading,
+    error: nextClassError,
+  } = useQuery({
     queryKey: ["NextClassData"],
     queryFn: getNextClassData,
   });
@@ -74,15 +80,21 @@ const CheckInProvider = ({ children }) => {
     }
   }, [checkInData]);
 
-  if (isLoading || currentClassIsLoading || nextClassIsLoading) {
+  if (checkInIsLoading || currentClassIsLoading || nextClassIsLoading) {
     return <Loader />;
   }
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
+  if (checkInError || currentClassError || nextClassError) {
+    console.log('~~~ error', checkInError)
+    return (
+      <p>
+        Error fetching data:{" "}
+        {checkInError?.message ||
+          currentClassError?.message ||
+          nextClassError?.message}
+      </p>
+    );
   }
-
-  const students = checkInData.attendees;
 
   // Theme toggle
   const toggleTheme = () => {
@@ -92,7 +104,7 @@ const CheckInProvider = ({ children }) => {
   return (
     <CheckInContext.Provider
       value={{
-        students,
+        checkInData,
         nextClassData,
         currentClassData,
         message,

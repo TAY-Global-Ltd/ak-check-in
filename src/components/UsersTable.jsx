@@ -1,24 +1,33 @@
 import "./UsersTable.css";
 import { useCheckInContext } from "../context/CheckInContext";
-import { filterStudentsByClass } from "../utils/studentSorting";
+import {
+  filterStudentsByClass,
+  checkStudentsStatus,
+} from "../utils/studentSorting";
 import Toggle from "./Toggle";
 
 const UsersTable = () => {
-  const { students, currentClassData, lightMode } = useCheckInContext();
-  const filteredStudents = filterStudentsByClass(students, currentClassData.id);
+  const { checkInData, currentClassData, lightMode } = useCheckInContext();
+  const currentClassStudents = filterStudentsByClass(
+    checkInData?.attendees,
+    currentClassData?.id
+  );
+  const { attendees } = checkStudentsStatus(currentClassStudents);
 
   return (
     <div className="wrapper">
-      {filteredStudents.map((student, index) => {
-        const isStudentCheckedIn = student.event_id === currentClassData.id;
+      {attendees.map((student, index) => {
+        const isStudentCheckedIn = student.status === "checkedin";
         const style = `${student.icon_type}-symbols-outlined`;
         return (
           <div
             key={index}
             className={`users-table ${
               isStudentCheckedIn ? "checked" : "unChecked"
-            } ${lightMode ? "light-bg-secondary" : "dark-bg-secondary"} ${
-              lightMode ? "light-box-shadow" : "dark-box-shadow"
+            } ${
+              lightMode
+                ? "light-bg-secondary light-box-shadow"
+                : "dark-bg-secondary dark-box-shadow"
             }
             `}
           >

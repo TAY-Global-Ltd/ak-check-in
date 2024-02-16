@@ -1,22 +1,32 @@
 export function filterStudentsByClass(students, id) {
-  return students.filter((student) => student.event_id === id);
+  if (students) {
+    return students.filter((student) => student.event_id === id);
+  }
 }
 
-// TODO update once issue #25 is closed
-export function countCheckedStatus(students) {
-  let checkedCount = 0;
-  let uncheckedCount = 0;
+export function checkStudentsStatus(students) {
+  let checkedInStudents = [];
+  let signedUpStudents = [];
+  let cancelledStudents = [];
 
-  students.forEach((student) => {
-    if (student.status === "checkedIn") {
-      checkedCount++;
-    } else if (student.status === "signedUp") {
-      uncheckedCount++;
+  students?.forEach((student) => {
+    if (student.status === "checkedin") {
+      checkedInStudents.push(student);
+    } else if (student.status === "signedup") {
+      signedUpStudents.push(student);
+    } else if (student.status === "cancelled") {
+      cancelledStudents.push(student);
     }
   });
 
+  const totalCount = checkedInStudents.length + signedUpStudents.length;
+  const attendees = [...signedUpStudents, ...checkedInStudents];
+
   return {
-    checkedIn: checkedCount,
-    signedUp: uncheckedCount,
+    checkedIn: checkedInStudents,
+    signedUp: signedUpStudents,
+    cancelled: cancelledStudents,
+    totalCount,
+    attendees,
   };
 }

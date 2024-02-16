@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import "./Modal.css";
-import {
-  greetingsArray,
-  emojies,
-  checkedInPhrases,
-} from "../constants/constants";
-import { getRandomElement } from "../utils/modalCopies";
 import { useCheckInContext } from "../context/CheckInContext";
 
 const Modal = () => {
   const { message, lightMode } = useCheckInContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [newMessage, setNewMessage] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
   const queryClient = useQueryClient();
+
+  const isCheckedIn = newMessage?.status === "checkedin";
 
   useEffect(() => {
     if (message && message !== newMessage) {
       setNewMessage(message);
     }
-  }, [message]);
+  }, [message, newMessage]);
 
   useEffect(() => {
-    if (newMessage) {
+    if (newMessage && isCheckedIn) {
       setIsModalVisible(true);
 
       const timeoutId = setTimeout(() => {
@@ -32,33 +28,27 @@ const Modal = () => {
 
       return () => clearTimeout(timeoutId);
     }
-  }, [newMessage, queryClient]);
-
-  const greeting = getRandomElement(greetingsArray);
-  const emoji = getRandomElement(emojies);
-  const summary = getRandomElement(checkedInPhrases);
+  }, [newMessage, isCheckedIn, queryClient]);
 
   return (
     <div
       className={`modal-overlay ${isModalVisible ? "visible" : ""} ${
-        lightMode ? "light-bg-primary" : "dark-bg-primary"
+        lightMode ? "overlay-light-bg-primary" : "overlay-dark-bg-primary"
       }`}
     >
       <div
         className={`modal-content ${
           lightMode ? "light-bg-secondary" : "dark-bg-secondary"
-        } ${lightMode ? "light-box-shadow" : "dark-box-shadow"}`}
+        }`}
       >
-        <h1>{greeting}</h1>
+        <h1>Hey</h1>
         {newMessage && (
           <>
             <p>{newMessage.reward}</p>
             <h1 className="student-name">{newMessage.name}</h1>
           </>
         )}
-        <h2>
-          {summary} {emoji}
-        </h2>
+        <h2>You are checked in 🤩</h2>
       </div>
     </div>
   );
