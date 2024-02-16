@@ -7,9 +7,8 @@ import {
 import Clock from "./Clock";
 
 const NextClass = () => {
-  const { nextClassData, checkInData, lightMode } = useCheckInContext();
+  const { nextClassData, students, lightMode } = useCheckInContext();
 
-  const students = checkInData?.attendees;
   const { start_time, title, id, icon } = nextClassData;
   const currentClassStudents = filterStudentsByClass(students, id);
   const { signedUp } = checkStudentsStatus(currentClassStudents);

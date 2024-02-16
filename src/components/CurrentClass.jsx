@@ -6,11 +6,11 @@ import {
 } from "../utils/studentSorting";
 
 const CurrentClass = () => {
-  const { checkInData, currentClassData } = useCheckInContext();
+  const { students, currentClassData } = useCheckInContext();
 
   const { title, description, icon, id } = currentClassData;
   const currentClassStudents = filterStudentsByClass(
-    checkInData?.attendees,
+    students,
     id
   );
   const { checkedIn, signedUp } = checkStudentsStatus(currentClassStudents);
