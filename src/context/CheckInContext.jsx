@@ -99,7 +99,6 @@ const CheckInProvider = ({ children }) => {
   }
 
   if (checkInError || currentClassError || nextClassError) {
-    console.log("~~~ error", checkInError);
     return (
       <p>
         Error fetching data:{" "}
