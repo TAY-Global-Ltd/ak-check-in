@@ -2,21 +2,24 @@ export function filterStudentsByClass(students, id) {
   return students.filter((student) => student.event_id === id);
 }
 
-// TODO update once issue #25 is closed
-export function countCheckedStatus(students) {
-  let checkedCount = 0;
-  let uncheckedCount = 0;
+export function checkStudentsStatus(students) {
+  let checkedInCount = 0;
+  let signedUpCount = 0;
+  let cancelledCount = 0;
 
   students.forEach((student) => {
-    if (student.status === "checkedIn") {
-      checkedCount++;
-    } else if (student.status === "signedUp") {
-      uncheckedCount++;
+    if (student.status === "checkedin") {
+      checkedInCount++;
+    } else if (student.status === "signedup") {
+      signedUpCount++;
+    } else if (student.status === "cancelled") {
+      cancelledCount++;
     }
   });
 
   return {
-    checkedIn: checkedCount,
-    signedUp: uncheckedCount,
+    checkedIn: checkedInCount,
+    signedUp: signedUpCount,
+    cancelled: cancelledCount,
   };
 }

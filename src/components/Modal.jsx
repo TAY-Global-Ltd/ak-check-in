@@ -9,6 +9,8 @@ import {
 import { getRandomElement } from "../utils/modalCopies";
 import { useCheckInContext } from "../context/CheckInContext";
 
+// TODO ~~~~~~ make overlay transparant, add green box shadow to Modal, improve lightMode ? conditional css, improve getRandomElement function, test current title with Teenage Kickboxing ot Muay Thai ( ledies only ) maybe add max-width to the container
+
 const Modal = () => {
   const { message, lightMode } = useCheckInContext();
   const [isModalVisible, setIsModalVisible] = useState(false);

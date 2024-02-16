@@ -89,6 +89,8 @@ const CheckInProvider = ({ children }) => {
     setLightMode((prevMode) => !prevMode);
   };
 
+console.log('~~~ students', students)
+
   return (
     <CheckInContext.Provider
       value={{
