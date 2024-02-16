@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/ak-check-in/static/css/main.26f0fd34.css",
+    "main.js": "/ak-check-in/static/js/main.0a3645cf.js",
+    "static/js/592.0af7e3c1.chunk.js": "/ak-check-in/static/js/592.0af7e3c1.chunk.js",
+    "static/media/ak-light-bg.png": "/ak-check-in/static/media/ak-light-bg.8b8c8bbded68ace6e1a1.png",
+    "static/media/ak-background.png": "/ak-check-in/static/media/ak-background.cba2fc4d9a0250d62bf2.png",
+    "index.html": "/ak-check-in/index.html",
+    "main.26f0fd34.css.map": "/ak-check-in/static/css/main.26f0fd34.css.map",
+    "main.0a3645cf.js.map": "/ak-check-in/static/js/main.0a3645cf.js.map",
+    "592.0af7e3c1.chunk.js.map": "/ak-check-in/static/js/592.0af7e3c1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.26f0fd34.css",
+    "static/js/main.0a3645cf.js"
+  ]
+}
