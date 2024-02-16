@@ -1,4 +1,4 @@
-const baseUrl = process.env.REACT_APP_HOST_URL || 'http://127.0.0.1'
+const baseUrl = process.env.REACT_APP_HOST_URL || "http://127.0.0.1";
 
 const responseHandler = async (url) => {
   const res = await fetch(`${baseUrl}${url}`);
@@ -6,15 +6,11 @@ const responseHandler = async (url) => {
     const data = await res.json();
     return data;
   }
-  throw new Error(
-    `Error [${res.status}][${res.url}]: ${res.body?.errors
-      ?.map(({ message }) => message)
-      ?.join("")}`
-  );
+  throw new Error(res.statusText);
 };
 
 export const getCheckInData = async () => {
-  const checkInData = responseHandler("initial_state").then((data) => data); 
+  const checkInData = responseHandler("initial_state").then((data) => data);
   return checkInData;
 };
 

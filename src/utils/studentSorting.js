@@ -1,25 +1,32 @@
 export function filterStudentsByClass(students, id) {
-  return students.filter((student) => student.event_id === id);
+  if (students) {
+    return students.filter((student) => student.event_id === id);
+  }
 }
 
 export function checkStudentsStatus(students) {
-  let checkedInCount = 0;
-  let signedUpCount = 0;
-  let cancelledCount = 0;
+  let checkedInStudents = [];
+  let signedUpStudents = [];
+  let cancelledStudents = [];
 
-  students.forEach((student) => {
+  students?.forEach((student) => {
     if (student.status === "checkedin") {
-      checkedInCount++;
+      checkedInStudents.push(student);
     } else if (student.status === "signedup") {
-      signedUpCount++;
+      signedUpStudents.push(student);
     } else if (student.status === "cancelled") {
-      cancelledCount++;
+      cancelledStudents.push(student);
     }
   });
 
+  const totalCount = checkedInStudents.length + signedUpStudents.length;
+  const attendees = [...signedUpStudents, ...checkedInStudents];
+
   return {
-    checkedIn: checkedInCount,
-    signedUp: signedUpCount,
-    cancelled: cancelledCount,
+    checkedIn: checkedInStudents,
+    signedUp: signedUpStudents,
+    cancelled: cancelledStudents,
+    totalCount,
+    attendees,
   };
 }

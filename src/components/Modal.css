@@ -9,6 +9,14 @@
     align-items: center;
     z-index: 999;
   }
+
+  .overlay-light-bg-primary {
+    background-color: #ffffffc8;
+  }
+  
+  .overlay-dark-bg-primary {
+    background-color: #1d1d1dc2;
+  }
   
   .modal-content {
     padding: 20px;
@@ -19,6 +27,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    box-shadow: 0 0 60px #2a6f21;
   }
 
   .modal-content h1 {
