@@ -4,6 +4,7 @@ import {
   filterStudentsByClass,
   checkStudentsStatus,
 } from "../utils/studentSorting";
+import logo from "../assets/logo192.png";
 
 const CurrentClass = () => {
   const { students, currentClassData } = useCheckInContext();
@@ -18,7 +19,7 @@ const CurrentClass = () => {
   return (
     <div className="current-class-container box">
       <div className="title-container">
-        <img src={icon} className="current-icon" alt="current class icon" />
+        <img src={icon ? icon : logo} className="current-icon" alt="current class icon" />
         <h1 className="title">{title}</h1>
       </div>
       <p>{description}</p>

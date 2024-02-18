@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useCheckInContext } from "../context/CheckInContext";
 import "../App.css";
+import logo from "../assets/logo192.png";
 
 const Clock = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -24,7 +25,7 @@ const Clock = () => {
           : "dark-bg-primary dark-box-shadow"
       }`}
     >
-      <img src="logo192.png" className="logo" alt="ak-logo" />
+      <img src={logo} className="logo" alt="ak-logo" />
       <strong>{formattedTime}</strong>
     </div>
   );

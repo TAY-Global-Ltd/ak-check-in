@@ -10,7 +10,7 @@
             "description": "BJJ Fundamentals",
             "start_time": "18:00",
             "end_time": "19:30",
-            "icon": "http://127.0.0.1:8765/static/images/bjj.png",
+            "icon": "http://192.168.1.105:8765/static/images/bjj.png",
             "icon_type": "url"
         },
         {
@@ -19,7 +19,7 @@
             "description": "Muay Thai",
             "start_time": "19:30",
             "end_time": "21:00",
-            "icon": "http://127.0.0.1:8765/static/images/muaythai.png",
+            "icon": "http://192.168.1.105:8765/static/images/muaythai.png",
             "icon_type": "url"
         }
     ],

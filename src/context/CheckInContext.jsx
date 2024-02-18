@@ -51,7 +51,7 @@ const CheckInProvider = ({ children }) => {
   });
 
   const {
-    data: currentClassData,
+    data: currentData,
     isLoading: currentClassIsLoading,
     error: currentClassError,
   } = useQuery({
@@ -60,7 +60,7 @@ const CheckInProvider = ({ children }) => {
   });
 
   const {
-    data: nextClassData,
+    data: nextData,
     isLoading: nextClassIsLoading,
     error: nextClassError,
   } = useQuery({
@@ -80,7 +80,7 @@ const CheckInProvider = ({ children }) => {
     }
   }, [checkInData]);
 
-  const mockData = [
+  const checkinMockData = [
     {
       event_id: "event-1",
       "user-id": "user0004",
@@ -92,22 +92,48 @@ const CheckInProvider = ({ children }) => {
     },
   ];
 
-  const students = checkInData ? checkInData.attendees : mockData;
+  const nextClassMockData = [
+    {
+      event_id: "event-1",
+      "user-id": "user0004",
+      name: "Peter Parker",
+      icon: "person_check",
+      icon_type: "material",
+      reward: "",
+      status: "checkedin",
+    },
+  ];
+
+  const currentClassMockData = [
+    {
+      id: "event-1",
+      title: "BJJ",
+      description: "BJJ Fundamentals",
+      start_time: "18:00",
+      end_time: "19:30",
+      icon_type: "url",
+      icon: "http://127.0.0.1:8765/static/images/bjj.png",
+    },
+  ];
 
   if (checkInIsLoading || currentClassIsLoading || nextClassIsLoading) {
     return <Loader />;
   }
 
-  if (checkInError || currentClassError || nextClassError) {
-    return (
-      <p>
-        Error fetching data:{" "}
-        {checkInError?.message ||
-          currentClassError?.message ||
-          nextClassError?.message}
-      </p>
-    );
-  }
+  // if (checkInError || currentClassError || nextClassError) {
+  //   return (
+  //     <p>
+  //       Error fetching data:{" "}
+  //       {checkInError?.message ||
+  //         currentClassError?.message ||
+  //         nextClassError?.message}
+  //     </p>
+  //   );
+  // }
+
+  const students = checkInData ? checkInData.attendees : checkinMockData;
+  const nextClassData = nextData ? nextData : nextClassMockData;
+  const currentClassData = currentData ? currentData : currentClassMockData;
 
   // Theme toggle
   const toggleTheme = () => {

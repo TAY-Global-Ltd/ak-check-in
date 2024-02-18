@@ -5,6 +5,7 @@ import {
   checkStudentsStatus,
 } from "../utils/studentSorting";
 import Clock from "./Clock";
+import logo from "../assets/logo192.png";
 
 const NextClass = () => {
   const { nextClassData, students, lightMode } = useCheckInContext();
@@ -25,7 +26,7 @@ const NextClass = () => {
             : "dark-bg-primary dark-box-shadow"
         }`}
       >
-        <img src={icon} style={{ width: "30px" }} alt="next class icon" />
+        <img src={icon ? icon : logo} style={{ width: "30px" }} alt="next class icon" />
         <p style={{ margin: "6px" }}>
           <strong>{title}</strong>
           <span> is next</span>
