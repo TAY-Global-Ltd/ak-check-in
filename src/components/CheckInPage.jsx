@@ -1,8 +1,8 @@
-import UsersTable from "./UsersTable";
-import NextClass from "./NextClass";
+import UsersTable from "./UsersTable/UsersTable";
+import NextClass from "./NextClass/NextClass";
 import Clock from "./Clock";
-import Modal from "./Modal";
-import CurrentClass from "./CurrentClass";
+import Modal from "./ModalMessage/Modal";
+import CurrentClass from "./CurrentClass/CurrentClass";
 import { useCheckInContext } from "../context/CheckInContext";
 import lightBackground from "../assets/ak-light-bg.png";
 import darkBackground from "../assets/ak-background.png";

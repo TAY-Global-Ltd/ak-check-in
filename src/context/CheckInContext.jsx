@@ -7,7 +7,6 @@ import {
   getCurrentClassData,
   getNextClassData,
 } from "../services/getCheckInData";
-import Loader from "../components/Loader";
 
 const CheckInContext = createContext();
 
@@ -51,7 +50,7 @@ const CheckInProvider = ({ children }) => {
   });
 
   const {
-    data: currentData,
+    data: currentClassData,
     isLoading: currentClassIsLoading,
     error: currentClassError,
   } = useQuery({
@@ -60,7 +59,7 @@ const CheckInProvider = ({ children }) => {
   });
 
   const {
-    data: nextData,
+    data: nextClassData,
     isLoading: nextClassIsLoading,
     error: nextClassError,
   } = useQuery({
@@ -83,12 +82,12 @@ const CheckInProvider = ({ children }) => {
   const checkinMockData = [
     {
       event_id: "event-1",
-      "user-id": "user0004",
-      name: "Peter Parker",
-      icon: "person_check",
-      icon_type: "material",
+      "user-id": "",
+      name: "No data",
+      icon: "",
+      icon_type: "",
       reward: "",
-      status: "checkedin",
+      status: "",
     },
   ];
 
@@ -107,33 +106,28 @@ const CheckInProvider = ({ children }) => {
   const currentClassMockData = [
     {
       id: "event-1",
-      title: "BJJ",
-      description: "BJJ Fundamentals",
-      start_time: "18:00",
-      end_time: "19:30",
+      title: "No Class available",
+      description: "",
+      start_time: "00:00",
+      end_time: "00:00",
       icon_type: "url",
       icon: "http://127.0.0.1:8765/static/images/bjj.png",
     },
   ];
 
-  if (checkInIsLoading || currentClassIsLoading || nextClassIsLoading) {
-    return <Loader />;
+  if (checkInError || currentClassError || nextClassError) {
+    console.log(`Error fetching data:
+    ${
+      checkInError?.message ||
+      currentClassError?.message ||
+      nextClassError?.message
+    }`);
   }
 
-  // if (checkInError || currentClassError || nextClassError) {
-  //   return (
-  //     <p>
-  //       Error fetching data:{" "}
-  //       {checkInError?.message ||
-  //         currentClassError?.message ||
-  //         nextClassError?.message}
-  //     </p>
-  //   );
-  // }
-
-  const students = checkInData ? checkInData.attendees : checkinMockData;
-  const nextClassData = nextData ? nextData : nextClassMockData;
-  const currentClassData = currentData ? currentData : currentClassMockData;
+  const students = checkInData?.attendees
+  // const students = checkInData ? checkInData.attendees : checkinMockData;
+  // const nextClassData = nextData ? nextData : nextClassMockData;
+  // const currentClassData = currentData ? currentData : currentClassMockData;
 
   // Theme toggle
   const toggleTheme = () => {
@@ -149,6 +143,9 @@ const CheckInProvider = ({ children }) => {
         message,
         lightMode,
         toggleTheme,
+        checkInIsLoading,
+        currentClassIsLoading,
+        nextClassIsLoading,
       }}
     >
       {children}
