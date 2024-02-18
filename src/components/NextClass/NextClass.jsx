@@ -17,7 +17,7 @@ const NextClass = () => {
     icon,
   } = nextClassData || {};
   const currentClassStudents = filterStudentsByClass(students, id);
-  const { signedUp } = checkStudentsStatus(currentClassStudents);
+  const { totalCount } = checkStudentsStatus(currentClassStudents);
 
   return (
     <div className="next-class-container">
@@ -41,7 +41,7 @@ const NextClass = () => {
           <br />
           starts at {start_time}
           <br />
-          Signed up: {signedUp.length}
+          Signed up: {totalCount}
         </p>
       </div>
     </div>
