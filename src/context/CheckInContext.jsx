@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
 import {
@@ -7,7 +7,7 @@ import {
   getCurrentClassData,
   getNextClassData,
 } from "../services/getCheckInData";
-import Loader from "../components/Loader";
+import { isClassOver } from "../utils/time";
 
 const CheckInContext = createContext();
 
@@ -22,6 +22,7 @@ export const useCheckInContext = () => {
 const CheckInProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
   const [lightMode, setLightMode] = useState(false);
+  const queryClient = useQueryClient();
 
   const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
     const pubnub = new PubNub({
@@ -80,34 +81,24 @@ const CheckInProvider = ({ children }) => {
     }
   }, [checkInData]);
 
-  const mockData = [
-    {
-      event_id: "event-1",
-      "user-id": "user0004",
-      name: "Peter Parker",
-      icon: "person_check",
-      icon_type: "material",
-      reward: "",
-      status: "checkedin",
-    },
-  ];
-
-  const students = checkInData ? checkInData.attendees : mockData;
-
-  if (checkInIsLoading || currentClassIsLoading || nextClassIsLoading) {
-    return <Loader />;
-  }
-
   if (checkInError || currentClassError || nextClassError) {
-    return (
-      <p>
-        Error fetching data:{" "}
-        {checkInError?.message ||
-          currentClassError?.message ||
-          nextClassError?.message}
-      </p>
-    );
+    console.log(`Error fetching data:
+    ${
+      checkInError?.message ||
+      currentClassError?.message ||
+      nextClassError?.message
+    }`);
   }
+
+  useEffect(() => {
+    if (currentClassData) {
+      if (isClassOver(currentClassData.end_time)) {
+        queryClient.invalidateQueries([""]);
+      }
+    }
+  }, [currentClassData, queryClient]);
+
+  const students = checkInData?.attendees;
 
   // Theme toggle
   const toggleTheme = () => {
@@ -123,6 +114,9 @@ const CheckInProvider = ({ children }) => {
         message,
         lightMode,
         toggleTheme,
+        checkInIsLoading,
+        currentClassIsLoading,
+        nextClassIsLoading,
       }}
     >
       {children}

@@ -1,5 +1,5 @@
 import React from "react";
-import { useCheckInContext } from "../context/CheckInContext";
+import { useCheckInContext } from "../../context/CheckInContext";
 import "./Toggle.css";
 
 const Toggle = () => {

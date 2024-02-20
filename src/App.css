@@ -1,10 +1,5 @@
 .App {
   text-align: center;
-  height: 100vh;
-  background-size: cover;
-  background-repeat: repeat;
-  background-attachment: fixed,
-
 }
 
 .logo {
@@ -18,7 +13,7 @@
   padding: 40px 60px 0 60px;
   justify-content: space-between;
   font-size: calc(10px + 2vmin);
-  margin-bottom: 80px;
+  margin-bottom: 20px;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -36,10 +31,7 @@
     flex-direction: column-reverse;
     align-items: center;
     padding: 20px 0 0 0;
-  }
-
-  .App {
-    height: auto;
+    margin-bottom: 40px;
   }
 
   .box {

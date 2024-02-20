@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import "./Modal.css";
-import { useCheckInContext } from "../context/CheckInContext";
+import { useCheckInContext } from "../../context/CheckInContext";
 
 const Modal = () => {
   const { message, lightMode } = useCheckInContext();
@@ -19,11 +19,11 @@ const Modal = () => {
 
   useEffect(() => {
     if (newMessage && isCheckedIn) {
+      queryClient.invalidateQueries([""]);
       setIsModalVisible(true);
 
       const timeoutId = setTimeout(() => {
         setIsModalVisible(false);
-        queryClient.invalidateQueries(["CheckInData"]);
       }, 3000);
 
       return () => clearTimeout(timeoutId);
@@ -41,14 +41,13 @@ const Modal = () => {
           lightMode ? "light-bg-secondary" : "dark-bg-secondary"
         }`}
       >
-        <h1>Hey</h1>
         {newMessage && (
           <>
             <p>{newMessage.reward}</p>
             <h1 className="student-name">{newMessage.name}</h1>
           </>
         )}
-        <h2>You are checked in 🤩</h2>
+        <h2>You are checked in ✅</h2>
       </div>
     </div>
   );
