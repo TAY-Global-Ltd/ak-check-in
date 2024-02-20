@@ -19,11 +19,11 @@ const Modal = () => {
 
   useEffect(() => {
     if (newMessage && isCheckedIn) {
+      queryClient.invalidateQueries([""]);
       setIsModalVisible(true);
 
       const timeoutId = setTimeout(() => {
         setIsModalVisible(false);
-        queryClient.invalidateQueries(["CheckInData"]);
       }, 3000);
 
       return () => clearTimeout(timeoutId);

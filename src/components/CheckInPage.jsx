@@ -17,6 +17,10 @@ const CheckInPage = () => {
       className={`App ${lightMode ? "light-font" : "dark-font"}`}
       style={{
         backgroundImage: `url(${backgroundImage})`,
+        minHeight: "100vh",
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
       }}
     >
       <header

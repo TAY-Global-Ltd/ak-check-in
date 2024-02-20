@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
 import {
@@ -7,6 +7,7 @@ import {
   getCurrentClassData,
   getNextClassData,
 } from "../services/getCheckInData";
+import { isClassOver } from "../utils/time";
 
 const CheckInContext = createContext();
 
@@ -21,6 +22,7 @@ export const useCheckInContext = () => {
 const CheckInProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
   const [lightMode, setLightMode] = useState(false);
+  const queryClient = useQueryClient();
 
   const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
     const pubnub = new PubNub({
@@ -79,42 +81,6 @@ const CheckInProvider = ({ children }) => {
     }
   }, [checkInData]);
 
-  const checkinMockData = [
-    {
-      event_id: "event-1",
-      "user-id": "",
-      name: "No data",
-      icon: "",
-      icon_type: "",
-      reward: "",
-      status: "",
-    },
-  ];
-
-  const nextClassMockData = [
-    {
-      event_id: "event-1",
-      "user-id": "user0004",
-      name: "Peter Parker",
-      icon: "person_check",
-      icon_type: "material",
-      reward: "",
-      status: "checkedin",
-    },
-  ];
-
-  const currentClassMockData = [
-    {
-      id: "event-1",
-      title: "No Class available",
-      description: "",
-      start_time: "00:00",
-      end_time: "00:00",
-      icon_type: "url",
-      icon: "http://127.0.0.1:8765/static/images/bjj.png",
-    },
-  ];
-
   if (checkInError || currentClassError || nextClassError) {
     console.log(`Error fetching data:
     ${
@@ -124,10 +90,15 @@ const CheckInProvider = ({ children }) => {
     }`);
   }
 
-  const students = checkInData?.attendees
-  // const students = checkInData ? checkInData.attendees : checkinMockData;
-  // const nextClassData = nextData ? nextData : nextClassMockData;
-  // const currentClassData = currentData ? currentData : currentClassMockData;
+  useEffect(() => {
+    if (currentClassData) {
+      if (isClassOver(currentClassData.end_time)) {
+        queryClient.invalidateQueries([""]);
+      }
+    }
+  }, [currentClassData, queryClient]);
+
+  const students = checkInData?.attendees;
 
   // Theme toggle
   const toggleTheme = () => {

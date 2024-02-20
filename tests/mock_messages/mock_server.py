@@ -17,14 +17,14 @@ USER_ID = "my_custom_user_id"
 app = FastAPI()
 
 origins = [
-    "http://192.168.1.105:3000",
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET"],
     allow_headers=["*"],
 )
 

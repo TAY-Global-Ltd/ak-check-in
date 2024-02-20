@@ -10,7 +10,7 @@
             "description": "BJJ Fundamentals",
             "start_time": "18:00",
             "end_time": "19:30",
-            "icon": "http://192.168.1.105:8765/static/images/bjj.png",
+            "icon": "http://localhost:8765/static/images/bjj.png",
             "icon_type": "url"
         },
         {
@@ -19,11 +19,227 @@
             "description": "Muay Thai",
             "start_time": "19:30",
             "end_time": "21:00",
-            "icon": "http://192.168.1.105:8765/static/images/muaythai.png",
+            "icon": "http://localhost:8765/static/images/muaythai.png",
             "icon_type": "url"
         }
     ],
     "initial_state": [
+        {
+            "event_id": "event-1",
+            "user-id": "user0001",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0002",
+            "name": "Will Turner",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0008",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0001",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0002",
+            "name": "Will Turner",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0008",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0001",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0002",
+            "name": "Will Turner",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0008",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0001",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0002",
+            "name": "Will Turner",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0008",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0001",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0002",
+            "name": "Will Turner",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0008",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0001",
+            "name": "Jack Sparrow",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0002",
+            "name": "Will Turner",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "",
+            "status": "checkedin"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0008",
+            "name": "Roger Gracie",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "🥋",
+            "status": "signedup"
+        },
         {
             "event_id": "event-1",
             "user-id": "user0001",
