@@ -1,5 +1,6 @@
 import boto3
 from settings import AWS_REGION, LAMBDA_FUNCTION_MAP, ROLE_NAME, AWS_ACCOUNT
+import os
 
 lambda_client = boto3.client("lambda", region_name=AWS_REGION)
 
@@ -18,6 +19,20 @@ def create_lambda_func(stage):
         Code=dict(ZipFile=zipped_code),
         Timeout=30,  # Timeout in seconds
         MemorySize=128,  # Minimum memory size in MB
+        Environment={
+            'Variables': {
+                'TEAMUP_API_KEY': os.environ['TEAMUP_API_KEY'],
+            }
+        },
     )
+
+    # response = lambda_client.update_function_configuration(
+    #     FunctionName=func_name,
+    #     Environment={
+    #         'Variables': {
+    #             'TEAMUP_API_KEY': os.environ['TEAMUP_API_KEY'],
+    #         }
+    #     },
+    # )
 
     print(response)

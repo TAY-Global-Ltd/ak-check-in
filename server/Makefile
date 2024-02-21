@@ -16,7 +16,7 @@ else
 endif
 
 build:
-	cp lambda_function.py test.py kms_utils.py ak_user.py cal_event.py build
+	cp settings.py lambda_function.py test.py kms_utils.py ak_user.py cal_event.py build
 
 test: build
 	@cd build && \
@@ -26,7 +26,7 @@ deploy: build
 	cd build && \
 	zip -r $(FILENAME) * && \
 	aws lambda update-function-code \
-		--function-name $(LAMBDA_NAME) \
+		--function-name $(LAMBDA_NAME)-uat \
 		--zip-file fileb://$(FILENAME)
 
 clean:
