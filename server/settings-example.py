@@ -22,7 +22,7 @@ LAMBDA_FUNCTION_MAP = {
     'prod': 'ak-check-in-prod'
 }
 
-AWS_ACCOUNT=652040406068
+AWS_ACCOUNT=123456789
 
 API_GATEWAY_MAP = {
     'uat': 'ak-check-in-uat',
