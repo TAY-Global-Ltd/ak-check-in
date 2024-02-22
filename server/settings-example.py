@@ -50,3 +50,23 @@ PUB_NUB_CHANNEL_MAP = {
 }
 
 PUB_NUB_USER_ID = "my_custom_user_id"
+
+WEBAPP_S3_BUCKET = "s3.myapp.com"
+
+WEBAPP_S3_BUCKET_MAP = {
+    'dev': "my-app-dev-bucket",
+    'uat': "my-app-uat-bucket",
+    'prod': "my-app-bucket",
+}
+
+CHECKIN_API_SERVER_URL_MAP = {
+    "dev": "https://api-dev.my-app.com/",
+    "uat": "https://api-uat.my-app.com/",
+    "prod": "https://api.my-app.com/",
+}
+
+PUBLIC_URL_MAP = {
+    "dev": "https://dev.my-app.com/",
+    "uat": "https://uat.my-app.com/",
+    "prod": "https://my-app.com/",
+}
