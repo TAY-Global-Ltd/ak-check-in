@@ -6,13 +6,22 @@ from datetime import date, timedelta, datetime
 import requests
 from dateutil import parser
 import pytz
-from settings import CAL_BASE_URL, CAL_EVENT_ICON_BASE_FOLDER, CAL_EVENT_ICON_MAP, TIME_ZONE_NAME
+from settings import (
+    CAL_BASE_URL,
+    CAL_EVENT_ICON_BASE_FOLDER,
+    CAL_EVENT_ICON_MAP,
+    TIME_ZONE_NAME,
+    PUB_NUB_CHANNEL_MAP,
+    PUB_NUB_USER_ID,
+    TABLE_MAP
+)
 
 TIME_ZONE = pytz.timezone(TIME_ZONE_NAME)
 
 logger = getLogger(__name__)
 
 TEAMUP_API_KEY = get_secret("TEAMUP_API_KEY")
+PUB_NUB_PUBLISH_KEY = get_secret("PUB_NUB_PUBLISH_KEY"),
 
 
 def expose(f):
@@ -71,9 +80,21 @@ class Handler:
     @expose
     def initial_state(self):
         today = self._today()
-        return self._list(today, today)
+        attendees = self._list(today, today)
+
+        return {
+            "subscription_info": {
+                "subscribe_key": PUB_NUB_PUBLISH_KEY,
+                "user_id": PUB_NUB_USER_ID,
+                "channel": PUB_NUB_CHANNEL_MAP[self.stage],
+            },
+            "attendees": attendees,
+        }
 
     def _get_stars(self):
+        print('!' * 100)
+        print(self.db)
+        print('!' * 100)
         return self.db["/rewards/stars"]
 
     def _process_signup(self, event_id, s, u, stars):
@@ -153,6 +174,9 @@ def lambda_handler(event, context):
 
     if "requestContext" in event:
         stage = event["requestContext"]["stage"]
+        if stage == 'test-invoke-stage':
+            stage = 'uat'
+
         params = dict(
             **get_params(event, "queryStringParameters"), **get_params(event, "body")
         )
@@ -163,7 +187,7 @@ def lambda_handler(event, context):
         path = event.get("method", "send_class_confirmation")
         params = get_params(event, "kwargs")
 
-    db = kydb.connect(f"dynamodb://ak-{stage}")
+    db = kydb.connect(f"dynamodb://" + TABLE_MAP[stage])
     db._cache = {}
     h = Handler(db, stage)
 

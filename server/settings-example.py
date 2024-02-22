@@ -42,3 +42,11 @@ CAL_EVENT_ICON_MAP = {
     4567: 'running.png',
     5678: 'mma.png',
 }
+
+PUB_NUB_CHANNEL_MAP = {
+    "dev": 'checkin-dev',
+    "uat": 'checkin-uat',
+    "prod": 'checkin-prod',
+}
+
+PUB_NUB_USER_ID = "my_custom_user_id"
