@@ -1,4 +1,4 @@
-const baseUrl = process.env.REACT_APP_HOST_URL
+const baseUrl = process.env.REACT_APP_CHECKIN_API_SERVER_URL
 
 const responseHandler = async (url) => {
   const res = await fetch(`${baseUrl}${url}`);
