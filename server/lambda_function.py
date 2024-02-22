@@ -92,9 +92,6 @@ class Handler:
         }
 
     def _get_stars(self):
-        print('!' * 100)
-        print(self.db)
-        print('!' * 100)
         return self.db["/rewards/stars"]
 
     def _process_signup(self, event_id, s, u, stars):
