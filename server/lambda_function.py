@@ -13,15 +13,23 @@ from settings import (
     TIME_ZONE_NAME,
     PUB_NUB_CHANNEL_MAP,
     PUB_NUB_USER_ID,
-    TABLE_MAP
+    TABLE_MAP,
 )
+from pubnub.pnconfiguration import PNConfiguration
+from pubnub.pubnub import PubNub
 
 TIME_ZONE = pytz.timezone(TIME_ZONE_NAME)
 
 logger = getLogger(__name__)
 
 TEAMUP_API_KEY = get_secret("TEAMUP_API_KEY")
-PUB_NUB_PUBLISH_KEY = get_secret("PUB_NUB_PUBLISH_KEY"),
+
+pnconfig = PNConfiguration()
+
+pnconfig.subscribe_key = get_secret("PUB_NUB_SUBSCRIBE_KEY")
+pnconfig.publish_key = get_secret("PUB_NUB_PUBLISH_KEY")
+pnconfig.user_id = PUB_NUB_USER_ID
+pubnub = PubNub(pnconfig)
 
 
 def expose(f):
@@ -84,7 +92,7 @@ class Handler:
 
         return {
             "subscription_info": {
-                "subscribe_key": PUB_NUB_PUBLISH_KEY,
+                "subscribe_key": pnconfig.subscribe_key,
                 "user_id": PUB_NUB_USER_ID,
                 "channel": PUB_NUB_CHANNEL_MAP[self.stage],
             },
@@ -94,7 +102,7 @@ class Handler:
     def _get_stars(self):
         return self.db["/rewards/stars"]
 
-    def _process_signup(self, event_id, s, u, stars):
+    def _process_action(self, event_id, u, stars, status):
         return {
             "event_id": event_id,
             "user-id": u.email(),
@@ -102,7 +110,7 @@ class Handler:
             "icon": "person_check" if u.is_full_member() else "person_cancel",
             "icon_type": "material",
             "reward": "⭐" * stars.get(u.email(), 0),
-            "status": "signedup",
+            "status": status
         }
 
     def _get_events(self, start_dt: date, end_dt: date):
@@ -120,7 +128,7 @@ class Handler:
             event_id = event["id"]
             signups = self._signed_ups(event_id)
 
-            res += [self._process_signup(event_id, s, u, stars) for s, u in signups]
+            res += [self._process_action(event_id, u, stars, "signedup") for s, u in signups]
 
         return res
 
@@ -154,6 +162,26 @@ class Handler:
         res = requests.get(url, headers={"Teamup-Token": self.api_key})
         return res.json()["event"]
 
+    @expose
+    def user_action(self, event_id, status, user_id):
+        print(status)
+        print(user_id)
+        u = self.db["/users/" + user_id]
+        stars = self._get_stars()
+
+        message = self._process_action(event_id, u, stars, status)
+        print(f"Sending message: {message}")
+
+        pubnub.publish().channel(
+            PUB_NUB_CHANNEL_MAP[self.stage]).message(message).sync()
+
+        try:
+            envelope = pubnub.publish().channel(
+                PUB_NUB_CHANNEL_MAP[self.stage]).message(message).sync()
+            print("Publish time: %d" % envelope.result.timetoken)
+        except Exception as e:
+            print("Error: %s" % e)
+
 
 def get_params(event, key):
     s = event.get(key)
@@ -171,24 +199,28 @@ def lambda_handler(event, context):
 
     if "requestContext" in event:
         stage = event["requestContext"]["stage"]
-        if stage == 'test-invoke-stage':
-            stage = 'uat'
+        if stage == "test-invoke-stage":
+            stage = "uat"
 
         params = dict(
             **get_params(event, "queryStringParameters"), **get_params(event, "body")
         )
 
-        path = event["path"].rsplit("/", 1)[1]
+        method = event["path"].rsplit("/", 1)[1]
     else:
-        stage = "prod"
-        path = event.get("method", "send_class_confirmation")
+        # Internal only not exposed
+        stage = event["stage"]
+        method = event["method"]
+        if method not in {"user_action"}:
+            raise ValueError("Method not allowed")
+
         params = get_params(event, "kwargs")
 
     db = kydb.connect(f"dynamodb://" + TABLE_MAP[stage])
     db._cache = {}
     h = Handler(db, stage)
 
-    f = getattr(h, path)
+    f = getattr(h, method)
     if is_exposed(f):
         if not params:
             params = {}

@@ -23,6 +23,7 @@ def create_lambda_func(stage):
             'Variables': {
                 'TEAMUP_API_KEY': os.environ['TEAMUP_API_KEY'],
                 'PUB_NUB_PUBLISH_KEY': os.environ['PUB_NUB_PUBLISH_KEY'],
+                'PUB_NUB_SUBSCRIBE_KEY': os.environ['PUB_NUB_SUBSCRIBE_KEY'],
             }
         },
     )
@@ -33,6 +34,7 @@ def create_lambda_func(stage):
     #         'Variables': {
     #             'TEAMUP_API_KEY': os.environ['TEAMUP_API_KEY'],
     #             'PUB_NUB_PUBLISH_KEY': os.environ['PUB_NUB_PUBLISH_KEY'],
+    #             'PUB_NUB_SUBSCRIBE_KEY': os.environ['PUB_NUB_SUBSCRIBE_KEY'],
     #         }
     #     },
     # )
