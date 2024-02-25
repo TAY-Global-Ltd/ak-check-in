@@ -17,6 +17,8 @@ USER_ID = "my_custom_user_id"
 app = FastAPI()
 
 origins = [
+    "http://192.168.0.105:3000",
+    "http://192.168.1.105:3000",
     "http://localhost:3000",
 ]
 
