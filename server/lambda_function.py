@@ -17,6 +17,7 @@ from settings import (
 )
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
+from typing import Optional
 
 TIME_ZONE = pytz.timezone(TIME_ZONE_NAME)
 
@@ -76,14 +77,36 @@ class Handler:
         }
 
     @expose
-    def current_event(self) -> dict:
-        today = self._today()
-        return self._format_cal_event(self._get_events(today, today)[0])
+    def current_event(self, now: Optional[datetime] = None) -> dict:
+        if now is None:
+            now = datetime.now(TIME_ZONE)
+        today = now.date()
+        for event in self._get_events(today, today + timedelta(days=2)):
+            end_dt = parser.parse(event["end_dt"])
+            if now <= end_dt:
+                print(now, end_dt)
+                return self._format_cal_event(event)
+
+        raise ValueError("Cannot find any event ending after current time")
 
     @expose
-    def next_event(self) -> dict:
-        today = self._today()
-        return self._format_cal_event(self._get_events(today, today)[1])
+    def next_event(self, now: Optional[datetime] = None) -> dict:
+        # TODO: Little inefficient to do current_event and next_event
+        # as separate queries. Let's put them together.
+        # See: https://github.com/tayglobal/ak-check-in/issues/54
+        if now is None:
+            now = datetime.now(TIME_ZONE)
+        today = now.date()
+        found_current = False
+        for event in self._get_events(today, today + timedelta(days=2)):
+            end_dt = parser.parse(event["end_dt"])
+            if now < end_dt:
+                if found_current:
+                    return self._format_cal_event(event)
+                else:
+                    found_current = True
+
+        raise ValueError("Cannot find any event starting after current time")
 
     @expose
     def initial_state(self):
@@ -110,7 +133,7 @@ class Handler:
             "icon": "person_check" if u.is_full_member() else "person_cancel",
             "icon_type": "material",
             "reward": "⭐" * stars.get(u.email(), 0),
-            "status": status
+            "status": status,
         }
 
     def _get_events(self, start_dt: date, end_dt: date):
@@ -128,7 +151,17 @@ class Handler:
             event_id = event["id"]
             signups = self._signed_ups(event_id)
 
-            res += [self._process_action(event_id, u, stars, "signedup") for s, u in signups]
+            res += [
+                self._process_action(event_id, u, stars, "signedup") for s, u in signups
+            ]
+
+            dt = parser.parse(event["start_dt"]).date()
+            folder = self._checkin_folder(event_id, dt)
+            print("Checking folder:", folder)
+            for user_id in self.db.ls(folder):
+                print("Checking user:", user_id)
+                u = self.db["/users/" + user_id]
+                res.append(self._process_action(event_id, u, stars, "checkedin"))
 
         return res
 
@@ -164,20 +197,23 @@ class Handler:
 
     @expose
     def user_action(self, event_id, status, user_id):
-        print(status)
-        print(user_id)
         u = self.db["/users/" + user_id]
         stars = self._get_stars()
 
         message = self._process_action(event_id, u, stars, status)
         print(f"Sending message: {message}")
 
-        pubnub.publish().channel(
-            PUB_NUB_CHANNEL_MAP[self.stage]).message(message).sync()
+        pubnub.publish().channel(PUB_NUB_CHANNEL_MAP[self.stage]).message(
+            message
+        ).sync()
 
         try:
-            envelope = pubnub.publish().channel(
-                PUB_NUB_CHANNEL_MAP[self.stage]).message(message).sync()
+            envelope = (
+                pubnub.publish()
+                .channel(PUB_NUB_CHANNEL_MAP[self.stage])
+                .message(message)
+                .sync()
+            )
             print("Publish time: %d" % envelope.result.timetoken)
         except Exception as e:
             print("Error: %s" % e)
