@@ -4,7 +4,6 @@ import {
   filterStudentsByClass,
   checkStudentsStatus,
 } from "../../utils/studentSorting";
-import logo from "../../assets/logo192.png";
 
 const CurrentClass = () => {
   const { students, currentClassData } = useCheckInContext();
