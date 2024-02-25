@@ -170,6 +170,7 @@ const CheckInProvider = ({ children }) => {
     <CheckInContext.Provider
       value={{
         students,
+        checkInData,
         nextClassData,
         currentClassData,
         message,

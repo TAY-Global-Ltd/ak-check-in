@@ -15,7 +15,20 @@ const Clock = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const formattedTime = currentTime.toLocaleTimeString();
+  // TODO update timeZone and locale once get these from server
+  // console.log('~~~ checkInData', checkInData.settings.timeZone)
+
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "GMT",
+    dateStyle: "medium",
+  }).format(currentTime);
+  const formattedTime = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "GMT",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(currentTime); 
 
   return (
     <div
@@ -26,7 +39,11 @@ const Clock = () => {
       }`}
     >
       <img src={logo} className="logo" alt="ak-logo" />
-      <strong>{formattedTime}</strong>
+      <strong>
+        {formattedTime}
+        <br />
+        {formattedDate}
+      </strong>
     </div>
   );
 };
