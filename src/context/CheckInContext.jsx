@@ -21,11 +21,15 @@ export const useCheckInContext = () => {
 
 const CheckInProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState(null);
   const [lightMode, setLightMode] = useState(false);
   const queryClient = useQueryClient();
 
   const handleMessage = (message) => {
+    if (!checkInData) {
+      return;
+    }
+
     const { status, "user-id": userId, ...userData } = message;
 
     if (status === "cancelled") {
@@ -84,8 +88,8 @@ const CheckInProvider = ({ children }) => {
           console.error("An unknown error occurred:", status.errorData);
         }
       },
-      message: function ({ message }) {
-        setMessage(message);
+      message: function (event) {
+        setMessage(event.message);
       },
     });
 
@@ -124,14 +128,14 @@ const CheckInProvider = ({ children }) => {
 
   // get initial data and sub to Pubnub
   useEffect(() => {
-    if (checkInData) {
-      setStudents(checkInData.attendees);
+    if (!!checkInData) {
       const subInfo = checkInData.subscription_info;
       subscribeToUpdates(
         subInfo.channel,
         subInfo.subscribe_key,
         subInfo.user_id
       );
+      setStudents(checkInData?.attendees);
       document.title = "AK Attendance";
     }
   }, [checkInData]);
@@ -147,7 +151,7 @@ const CheckInProvider = ({ children }) => {
 
   // refetch all data ince current class is over
   useEffect(() => {
-    if (currentClassData) {
+    if (!!currentClassData) {
       if (isClassOver(currentClassData.end_time)) {
         queryClient.invalidateQueries([""]);
       }
@@ -156,7 +160,7 @@ const CheckInProvider = ({ children }) => {
 
   // handle message once received from Pubnub
   useEffect(() => {
-    if (message) {
+    if (!!message) {
       handleMessage(message);
     }
   }, [message]);
