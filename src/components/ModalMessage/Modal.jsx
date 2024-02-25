@@ -19,7 +19,6 @@ const Modal = () => {
 
   useEffect(() => {
     if (newMessage && isCheckedIn) {
-      queryClient.invalidateQueries([""]);
       setIsModalVisible(true);
 
       const timeoutId = setTimeout(() => {

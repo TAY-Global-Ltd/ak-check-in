@@ -21,8 +21,44 @@ export const useCheckInContext = () => {
 
 const CheckInProvider = ({ children }) => {
   const [message, setMessage] = useState(null);
+  const [students, setStudents] = useState([]);
   const [lightMode, setLightMode] = useState(false);
   const queryClient = useQueryClient();
+
+  const handleMessage = (message) => {
+    const { status, "user-id": userId, ...userData } = message;
+
+    if (status === "cancelled") {
+      // Remove user from the list
+      removeUser(userId);
+    } else {
+      // Check if the user already exists in the list
+      const existingUser = students.find((user) => user["user-id"] === userId);
+
+      if (existingUser) {
+        // User already exists in the list, update status if it's different
+        if (existingUser.status !== status) {
+          const updatedStudents = students.map((user) =>
+            user["user-id"] === userId ? { ...user, status, ...userData } : user
+          );
+          setStudents(updatedStudents);
+        }
+      } else {
+        // User not found in the list, add the user
+        setStudents((prevStudents) => [
+          ...prevStudents,
+          { "user-id": userId, ...userData, status },
+        ]);
+      }
+    }
+    setMessage(message);
+  };
+
+  const removeUser = (userId) => {
+    setStudents((prevStudents) =>
+      prevStudents.filter((user) => user["user-id"] !== userId)
+    );
+  };
 
   const subscribeToUpdates = async (channel, subscribeKey, uuid) => {
     const pubnub = new PubNub({
@@ -31,8 +67,25 @@ const CheckInProvider = ({ children }) => {
     });
 
     pubnub.addListener({
-      message: function (event) {
-        setMessage(event.message);
+      error: (error) => console.log("Error:", error),
+      status: function (status) {
+        if (status.category === "PNUnsubscribedCategory") {
+          console.log(`Unsubscribed from channel: ${status.affectedChannels}`);
+        }
+        if (status.category === "PNDisconnectedCategory") {
+          console.log("Attempting to reconnect...");
+          pubnub.reconnect();
+        }
+        if (status.category === "PNNetworkDownCategory") {
+          console.log("No Network conncetion, attempting to reconnect...");
+          pubnub.reconnect();
+        }
+        if (status.category === "PNUnknownCategory") {
+          console.error("An unknown error occurred:", status.errorData);
+        }
+      },
+      message: function ({ message }) {
+        setMessage(message);
       },
     });
 
@@ -69,8 +122,10 @@ const CheckInProvider = ({ children }) => {
     queryFn: getNextClassData,
   });
 
+  // get initial data and sub to Pubnub
   useEffect(() => {
     if (checkInData) {
+      setStudents(checkInData.attendees);
       const subInfo = checkInData.subscription_info;
       subscribeToUpdates(
         subInfo.channel,
@@ -90,6 +145,7 @@ const CheckInProvider = ({ children }) => {
     }`);
   }
 
+  // refetch all data ince current class is over
   useEffect(() => {
     if (currentClassData) {
       if (isClassOver(currentClassData.end_time)) {
@@ -98,7 +154,12 @@ const CheckInProvider = ({ children }) => {
     }
   }, [currentClassData, queryClient]);
 
-  const students = checkInData?.attendees;
+  // handle message once received from Pubnub
+  useEffect(() => {
+    if (message) {
+      handleMessage(message);
+    }
+  }, [message]);
 
   // Theme toggle
   const toggleTheme = () => {
