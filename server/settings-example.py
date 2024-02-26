@@ -53,6 +53,14 @@ CAL_EVENT_ICON_MAP = {
     5678: 'mma.png',
 }
 
+CAL_EVENT_TITLE = {
+    1234: 'Yoga',
+    2345: 'BJJ',
+    3456: 'Muay Thai',
+    4567: 'Run Club',
+    5678: 'MMA',
+}
+
 PUB_NUB_CHANNEL_MAP = {
     "dev": 'checkin-dev',
     "uat": 'checkin-uat',

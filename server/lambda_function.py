@@ -11,6 +11,7 @@ from settings import (
     CAL_BASE_URL,
     CAL_EVENT_ICON_BASE_FOLDER,
     CAL_EVENT_ICON_MAP,
+    CAL_EVENT_TITLE,
     TIME_ZONE_NAME,
     PUB_NUB_CHANNEL_MAP,
     PUB_NUB_USER_ID,
@@ -66,14 +67,15 @@ class Handler:
     def _format_cal_event(cls, event: dict) -> dict:
         start_dt = datetime.fromisoformat(event["start_dt"])
         end_dt = datetime.fromisoformat(event["end_dt"])
+        sub_cal = event["subcalendar_id"]
 
         return {
             "id": event["id"],
-            "title": event["title"],
+            "title": CAL_EVENT_TITLE[sub_cal],
             "description": event["title"],
             "start_time": start_dt.strftime("%H:%M"),
             "end_time": end_dt.strftime("%H:%M"),
-            "icon": cls._get_icon(event["subcalendar_id"]),
+            "icon": cls._get_icon(sub_cal),
             "icon_type": "url",
         }
 
