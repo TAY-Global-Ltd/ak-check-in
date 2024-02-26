@@ -5,6 +5,16 @@
 
 TIME_ZONE_NAME = "Europe/London"
 
+SETTINGS = {
+    "theme": "default",
+    "display_mode": "dark",
+    "refresh_interval": 3600,
+    "title": "My Martial Arts Academy",
+    "description": "Welcome to our academy! We offer a variety of martial arts classes. Please check in to earn rewards!",
+    "icon": "http://my-check-in-app.com/static/images/logo.png",
+    "timezone": TIME_ZONE_NAME
+}
+
 APP_NAME = 'ak-check-in'
 AWS_REGION = 'eu-west-2'
 
