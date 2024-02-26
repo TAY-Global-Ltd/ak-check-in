@@ -166,6 +166,16 @@ const CheckInProvider = ({ children }) => {
     setLightMode((prevMode) => !prevMode);
   };
 
+  useEffect(() => {
+    if (!!checkInData) {
+      const interval = setInterval(() => {
+        queryClient.invalidateQueries("");
+      }, checkInData?.settings.refresh_interval); // Invalidate the query every X sec
+
+      return () => clearInterval(interval); // Clear the interval on component unmount
+    }
+  }, [queryClient, checkInData]);
+
   return (
     <CheckInContext.Provider
       value={{

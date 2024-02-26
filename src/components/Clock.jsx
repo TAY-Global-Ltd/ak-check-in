@@ -5,7 +5,7 @@ import logo from "../assets/logo192.png";
 
 const Clock = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const { lightMode } = useCheckInContext();
+  const { lightMode, checkInData } = useCheckInContext();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -15,20 +15,17 @@ const Clock = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // TODO update timeZone and locale once get these from server
-  // console.log('~~~ checkInData', checkInData.settings.timeZone)
-
   const formattedDate = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "GMT",
+    timeZone: checkInData?.settings.timezone,
     dateStyle: "medium",
   }).format(currentTime);
   const formattedTime = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "GMT",
+    timeZone: checkInData?.settings.timezone,
     hour12: false,
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-  }).format(currentTime); 
+  }).format(currentTime);
 
   return (
     <div
