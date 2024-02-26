@@ -58,8 +58,17 @@ curl http://127.0.0.1:8765/initial_state
 Example output: 
 
 ```
-{"subscription_info":{"subscribe_key":"sub-c-XXXXXXXXXXXXXXX","user_id":"my_custom_user_id","channel":"dev-checkin"},"current_event":{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"http://127.0.0.1:8765/static/images/bjj.png","icon_type":"url"},"next_event":{"id":"event-2","title":"Muay Thai","description":"Muay Thai","start_time":"19:30","end_time":"21:00","icon":"http://127.0.0.1:8765/static/images/muaythai.png","icon_type":"url"},"attendees":[{"event_id":"event-1","user-id":"user0001","name":"Jack Sparrow","icon":"person_check","icon_type":"material","reward":"","status":"signedup"},{"event_id":"event-1","user-id":"user0002","name":"Will Turner","icon":"person_check","icon_type":"material","reward":"","status":"checkedin"},{"event_id":"event-1","user-id":"user0008","name":"Roger Gracie","icon":"person_check","icon_type":"material","reward":"🥋","status":"signedup"}]}
+{"settings":{"theme":"default","display_mode":"dark","refresh_interval":3600,"title":"My Martial Arts Academy","description":"Welcome to our academy! We offer a variety of martial arts classes. Please check in to earn rewards!","icon":"http://localhost:8765/static/images/logo.png","timezone":"Europe/London"},"subscription_info":{"subscribe_key":"sub-c-08cc7ea1-02ad-4c5d-8b44-5325568e63a7","user_id":"my_custom_user_id","channel":"dev-checkin"},"current_event":{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"http://localhost:8765/static/images/bjj.png","icon_type":"url"},"next_event":{"id":"event-2","title":"Muay Thai","description":"Muay Thai","start_time":"19:30","end_time":"21:00","icon":"http://localhost:8765/static/images/muaythai.png","icon_type":"url"},"attendees":[{"event_id":"event-1","user-id":"user0003","name":"John Smith","icon":"person_check","icon_type":"material","reward":"⭐","status":"checkedin"},{"event_id":"event-1","user-id":"user0004","name":"Peter Parker","icon":"person_check","icon_type":"material","reward":"","status":"signedup"},{"event_id":"event-1","user-id":"user0005","name":"Uzumaki Naruto","icon":"person","icon_type":"material","reward":"","status":"checkedin"}]}
 ```
+
+The settings are as follows:
+
+* ``display_modeb``: ``dark`` or ``light``.
+* ``refresh_interval``: Number of seconds until the page should refresh itself.
+* ``title``: Set the title of the page
+* ``description``: Set the description of the page
+* ``icon``: The icon for the webapp
+* ``timezone``: The timezone of the gym. For example ``Europe/London``
 
 ### Get Event By ID
 

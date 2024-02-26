@@ -53,6 +53,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/initial_state")
 def initial_state():
     return {
+        "settings": fixture['settings'],
         "subscription_info": {
             "subscribe_key": SUBSCRIBE_KEY,
             "user_id": USER_ID,

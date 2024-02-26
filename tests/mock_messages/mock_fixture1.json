@@ -1,7 +1,12 @@
 {
     "settings": {
         "theme": "default",
-        "display_mode": "dark"
+        "display_mode": "dark",
+        "refresh_interval": 3600,
+        "title": "My Martial Arts Academy",
+        "description": "Welcome to our academy! We offer a variety of martial arts classes. Please check in to earn rewards!",
+        "icon": "http://localhost:8765/static/images/logo.png",
+        "timezone": "Europe/London"
     },
     "events": [
         {
