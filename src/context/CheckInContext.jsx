@@ -135,9 +135,19 @@ const CheckInProvider = ({ children }) => {
         subInfo.subscribe_key,
         subInfo.user_id
       );
+
+      // set theme mode based on server settings
+      if (checkInData.settings.display_mode !== "dark") setLightMode(true);
+
       setStudents(checkInData?.attendees);
+
+      const interval = setInterval(() => {
+        queryClient.invalidateQueries("");
+      }, checkInData?.settings.refresh_interval); // Invalidate the query every X sec
+
+      return () => clearInterval(interval); // Clear the interval on component unmount
     }
-  }, [checkInData]);
+  }, [checkInData, queryClient]);
 
   if (checkInError || currentClassError || nextClassError) {
     console.log(`Error fetching data:
@@ -168,16 +178,6 @@ const CheckInProvider = ({ children }) => {
   const toggleTheme = () => {
     setLightMode((prevMode) => !prevMode);
   };
-
-  useEffect(() => {
-    if (!!checkInData) {
-      const interval = setInterval(() => {
-        queryClient.invalidateQueries("");
-      }, checkInData?.settings.refresh_interval); // Invalidate the query every X sec
-
-      return () => clearInterval(interval); // Clear the interval on component unmount
-    }
-  }, [queryClient, checkInData]);
 
   return (
     <CheckInContext.Provider

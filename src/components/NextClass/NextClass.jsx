@@ -5,10 +5,10 @@ import {
   checkStudentsStatus,
 } from "../../utils/studentSorting";
 import Clock from "../Clock";
-import logo from "../../assets/logo192.png";
 
 const NextClass = () => {
-  const { nextClassData, students, lightMode } = useCheckInContext();
+  const { nextClassData, students, lightMode } =
+    useCheckInContext();
 
   const {
     start_time = "00:00",
@@ -32,7 +32,7 @@ const NextClass = () => {
         }`}
       >
         <img
-          src={icon ? icon : logo}
+          src={icon}
           style={{ width: "30px", marginTop: "6px" }}
           alt="next class icon"
         />
