@@ -14,7 +14,8 @@ def get_rest_api_id(stage):
 
 def _get_resource_id(rest_api_id, path):
     response = client.get_resources(restApiId=rest_api_id)
-    path = "/" + path
+    if not path.startswith("/"):
+        path = "/" + path
 
     return next(x["id"] for x in response["items"] if x["path"] == path)
 

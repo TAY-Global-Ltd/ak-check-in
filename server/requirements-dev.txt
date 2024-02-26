@@ -3,3 +3,5 @@ boto3
 requests
 pytz
 pubnub
+termcolor
+click

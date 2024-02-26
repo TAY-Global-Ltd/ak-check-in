@@ -48,6 +48,6 @@ def test_checkin():
 
 
 if __name__ == "__main__":
-    # test_initial_state()
-    test_current_next_event()
+    test_initial_state()
+    # test_current_next_event()
     # test_checkin()
