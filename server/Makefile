@@ -1,4 +1,6 @@
 LAMBDA_NAME=ak-check-in
+UAT_LAMBDA_NAME=$(LAMBDA_NAME)-uat
+PROD_LAMBDA_NAME=$(LAMBDA_NAME)-prod
 FILENAME=$(LAMBDA_NAME).zip
 AWSCLI=awscliv2
 AWS_LAMBDA=$(AWSCLI) lambda
@@ -26,7 +28,14 @@ deploy: build
 	cd build && \
 	zip -r $(FILENAME) * && \
 	aws lambda update-function-code \
-		--function-name $(LAMBDA_NAME)-uat \
+		--function-name $(UAT_LAMBDA_NAME) \
+		--zip-file fileb://$(FILENAME)
+
+deploy-prod: build
+	cd build && \
+	zip -r $(FILENAME) * && \
+	aws lambda update-function-code \
+		--function-name $(PROD_LAMBDA_NAME) \
 		--zip-file fileb://$(FILENAME)
 
 clean:
