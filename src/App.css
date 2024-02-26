@@ -6,6 +6,11 @@
   max-width: 80px;
 }
 
+.clock-wrapper {
+  min-width: 8vw;
+  min-height: 8vw;
+}
+
 .App-header {
   font-family: "Nova Square", display;
   display: flex;
