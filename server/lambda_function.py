@@ -7,6 +7,7 @@ import requests
 from dateutil import parser
 import pytz
 from settings import (
+    SETTINGS,
     CAL_BASE_URL,
     CAL_EVENT_ICON_BASE_FOLDER,
     CAL_EVENT_ICON_MAP,
@@ -114,6 +115,7 @@ class Handler:
         attendees = self._list(today, today)
 
         return {
+            "settings": SETTINGS,
             "subscription_info": {
                 "subscribe_key": pnconfig.subscribe_key,
                 "user_id": PUB_NUB_USER_ID,
