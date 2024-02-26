@@ -13,6 +13,8 @@ const CurrentClass = () => {
     description,
     icon,
     id,
+    start_time,
+    end_time,
   } = currentClassData || {};
   const currentClassStudents = filterStudentsByClass(students, id);
   const { totalCount, checkedIn } = checkStudentsStatus(currentClassStudents);
@@ -22,16 +24,18 @@ const CurrentClass = () => {
       <div className="title-container">
         <img
           src={icon}
-          className={icon ? "current-icon" : 'hide'}
+          className={icon ? "current-icon" : "hide"}
           alt="current class icon"
         />
         <h1 className="title">{title}</h1>
       </div>
-      <p>{description}</p>
-      <p>
+      <h4 style={{margin: "0"}} >{description}</h4>
+      <h4>
         Signed up: <strong>{totalCount}</strong> / Checked in:{" "}
         <strong>{checkedIn.length}</strong>
-      </p>
+        <br />
+        {start_time}-{end_time}
+      </h4>
     </div>
   );
 };
