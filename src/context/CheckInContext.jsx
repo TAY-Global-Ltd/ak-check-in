@@ -136,7 +136,6 @@ const CheckInProvider = ({ children }) => {
         subInfo.user_id
       );
       setStudents(checkInData?.attendees);
-      document.title = "AK Attendance";
     }
   }, [checkInData]);
 
