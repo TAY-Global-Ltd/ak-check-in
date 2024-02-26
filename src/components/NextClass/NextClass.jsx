@@ -33,16 +33,17 @@ const NextClass = () => {
       >
         <img
           src={icon ? icon : logo}
-          style={{ width: "30px" }}
+          style={{ width: "30px", marginTop: "6px" }}
           alt="next class icon"
         />
-        <p style={{ margin: "6px" }}>
-          <strong>{title}</strong>
+        <h4 style={{ margin: "0" }}>{title}</h4>
+        <h6 style={{ margin: "6px 0 6px 0" }}>
+          Next Class
           <br />
           starts at {start_time}
           <br />
           Signed up: {totalCount}
-        </p>
+        </h6>
       </div>
     </div>
   );

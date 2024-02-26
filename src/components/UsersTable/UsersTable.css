@@ -9,17 +9,13 @@
   padding-bottom: 20px;
 }
 
-.users-table {
-  min-width: 240px;
-}
-
 .name {
   margin: 0;
-  font-size: 20px;
+  font-size: 1.2em;
 }
 
 .reward {
-  font-size: 14px;
+  font-size: 0.7em;
   margin: 0;
 }
 
@@ -32,7 +28,7 @@
 }
 
 .users-table {
-  width: 180px;
+  min-width: 200px;
   border-radius: 6px;
   padding: 0 12px;
   display: flex;
@@ -56,11 +52,14 @@
   .name-wrapper {
     width: 100%;
   }
+  .name {
+    font-size: 1em;
+  }
 }
 
 @media only screen and (min-width: 1024px) {
   .wrapper {
-    font-size: 18px;
+    font-size: 0.9em;
     gap: 20px 30px;
   }
 }

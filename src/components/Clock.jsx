@@ -39,11 +39,11 @@ const Clock = () => {
       }`}
     >
       <img src={logo} className="logo" alt="ak-logo" />
-      <strong>
+      <h4 style={{ margin: "0" }}>
         {formattedTime}
         <br />
         {formattedDate}
-      </strong>
+      </h4>
     </div>
   );
 };

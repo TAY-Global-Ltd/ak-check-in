@@ -18,4 +18,5 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: "Open Sans", sans-serif;
   color: var(--text-light);
+  font-size: 100%;
 }
