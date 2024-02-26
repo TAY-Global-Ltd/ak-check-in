@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import UsersTable from "./UsersTable/UsersTable";
 import NextClass from "./NextClass/NextClass";
 import Clock from "./Clock";
@@ -9,8 +10,26 @@ import darkBackground from "../assets/ak-background.png";
 import "../global.css";
 
 const CheckInPage = () => {
-  const { lightMode } = useCheckInContext();
+  const { lightMode, checkInData } = useCheckInContext();
   const backgroundImage = lightMode ? lightBackground : darkBackground;
+
+  useEffect(() => {
+    if (!!checkInData) {
+      // Set the meta title
+      document.title = checkInData?.settings.title;
+
+      // Set the meta icon's href
+      const existingFaviconLink = document.getElementById("app-icon");
+      existingFaviconLink.setAttribute("href", checkInData?.settings.icon);
+
+      // Set the description by updating the <meta> tag
+      const metaDescription = document.getElementById("app-description");
+      metaDescription.setAttribute(
+        "content",
+        checkInData?.settings.description
+      );
+    }
+  }, [checkInData]);
 
   return (
     <div
@@ -18,9 +37,9 @@ const CheckInPage = () => {
       style={{
         backgroundImage: `url(${backgroundImage})`,
         minHeight: "100vh",
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
       }}
     >
       <header

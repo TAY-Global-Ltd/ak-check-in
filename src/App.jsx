@@ -1,19 +1,18 @@
-import { Suspense } from "react";
+import { Suspense} from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import "./App.css";
 import CheckInProvider from "./context/CheckInContext";
 import CheckInPage from "./components/CheckInPage";
-import Loader from './components/common/Loader/Loader'
+import Loader from "./components/common/Loader/Loader";
 
 const App = () => {
-  const queryClient = new QueryClient()
-
+  const queryClient = new QueryClient();
   return (
-    <Suspense fallback={<Loader/>}>
+    <Suspense fallback={<Loader />}>
       <QueryClientProvider client={queryClient}>
         <CheckInProvider>
-          <CheckInPage/>
+          <CheckInPage />
         </CheckInProvider>
       </QueryClientProvider>
     </Suspense>
