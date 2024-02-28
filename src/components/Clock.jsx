@@ -26,6 +26,8 @@ const Clock = () => {
     second: "2-digit",
   }).format(currentTime);
 
+  const timeParts = formattedTime.split(":");
+
   return (
     <div
       className={`logo-container ${
@@ -36,7 +38,9 @@ const Clock = () => {
     >
       <img src={checkInData?.settings.icon} className="logo" alt="ak-logo" />
       <h4 style={{ margin: "0" }}>
-        {formattedTime}
+        <span>{timeParts[0]}:</span>
+        <span>{timeParts[1]}:</span>
+        <span style={{ color: "var(--main-color)" }}>{timeParts[2]}</span>{" "}
         <br />
         {formattedDate}
       </h4>
