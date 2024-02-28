@@ -143,7 +143,7 @@ const CheckInProvider = ({ children }) => {
 
       const interval = setInterval(() => {
         queryClient.invalidateQueries("");
-      }, checkInData?.settings.refresh_interval); // Invalidate the query every X sec
+      }, checkInData?.settings.refresh_interval * 1000); // Invalidate the query every 1 hour
 
       return () => clearInterval(interval); // Clear the interval on component unmount
     }
