@@ -157,20 +157,19 @@ class Handler:
             signups = self._signed_ups(event_id)
 
             for _s, u in signups:
-                users[u.email()] = u
-                self._process_action(event_id, u, stars, "signedup")
+                users[u.email()] = (u, 'signedup')
 
             dt = parser.parse(event["start_dt"]).date()
             folder = self._checkin_folder(event_id, dt)
-            print("Checking folder:", folder)
+
             for user_id in self.db.ls(folder):
-                print("Checking user:", user_id)
+
                 u = self.db["/users/" + user_id]
-                users[u.email()] = u
+                users[u.email()] = (u, 'checkedin')
 
             res += [
-                self._process_action(event_id, u, stars, "checkedin")
-                for u in users.values()
+                self._process_action(event_id, u, stars, s)
+                for u, s in users.values()
             ]
 
         return res
