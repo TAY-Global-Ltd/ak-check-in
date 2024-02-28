@@ -25,7 +25,12 @@ const UsersTable = () => {
     }
   }, [students]);
 
-  if (studentsList === null || checkInIsLoading || currentClassIsLoading || nextClassIsLoading) {
+  if (
+    studentsList === null ||
+    checkInIsLoading ||
+    currentClassIsLoading ||
+    nextClassIsLoading
+  ) {
     return <Loader />;
   }
 
@@ -53,7 +58,11 @@ const UsersTable = () => {
           >
             <span
               className={style}
-              style={isStudentCheckedIn ? { color: "green" } : {}}
+              style={
+                isStudentCheckedIn
+                  ? { color: "green" }
+                  : { color: "var(--main-color)" }
+              }
             >
               {student.icon}
             </span>

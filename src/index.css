@@ -1,4 +1,5 @@
 :root {
+  --main-color: #CD2022;
   --background-light-primary: #ffffff;
   --background-light-secondary: #e3e1e1;
   --text-dark: #333333;
@@ -16,7 +17,7 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: var(--text-light);
   font-size: 100%;
 }
