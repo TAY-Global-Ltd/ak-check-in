@@ -29,7 +29,15 @@
         }
     ],
     "initial_state": [
-        
+        {
+            "event_id": "event-1",
+            "user-id": "user0003",
+            "name": "John Smith",
+            "icon": "person_check",
+            "icon_type": "material",
+            "reward": "⭐",
+            "status": "checkedin"
+        }
     ],
     "message_settings": {
         "interval": 5
@@ -88,6 +96,15 @@
             "icon_type": "material",
             "reward": "",
             "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
+            "user-id": "user0005",
+            "name": "Uzumaki Naruto",
+            "icon": "person",
+            "icon_type": "material",
+            "reward": "",
+            "status": "checkedin"
         }
     ]
 }

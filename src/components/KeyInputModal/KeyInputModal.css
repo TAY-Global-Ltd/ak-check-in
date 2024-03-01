@@ -13,14 +13,22 @@
   height: 42px;
   margin: 20px 0 20px 0;
   border: 1px solid rgba(255, 255, 255, 0.489);
-  color: rgb(176, 176, 176);
-  font-size: 1.2em;
+  color: rgb(255, 255, 255);
+  font-size: 1em;
   padding: 6px;
 }
 
 .key-input:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 0.855);
+}
+
+.key-input:focus::placeholder {
+  color: transparent;
+}
+
+.key-input::placeholder {
+    color: rgba(188, 188, 188, 0.186);
 }
 
 .key-title {
@@ -34,9 +42,11 @@
     padding: 12px 22px 12px 22px;
     cursor: pointer;
     font-size: 1.2em;
+    transition: 0.3s ease-in-out;
 }
 
 .key-button:hover {
-    border: 1px solid #01B800;
+    border: 1px solid #10e110ac;
+    color: #10e110ac;
     transition:ease-in-out;
 }

@@ -7,8 +7,7 @@ import {
 import Clock from "../Clock";
 
 const NextClass = () => {
-  const { nextClassData, students, lightMode } =
-    useCheckInContext();
+  const { nextClassData, students, lightMode } = useCheckInContext();
 
   const {
     start_time = "00:00",
@@ -37,12 +36,13 @@ const NextClass = () => {
           alt="next class icon"
         />
         <h4 style={{ margin: "0" }}>{title}</h4>
-        <h6 style={{ margin: "6px 0 6px 0" }}>
+        <h6 style={{ margin: "6px 0 0 0" }}>
           Next Class
           <br />
           starts at {start_time}
           <br />
-          Signed up: {totalCount}
+          Signed up:{" "}
+          <span style={{ color: "var(--main-color)" }}>{totalCount}</span>
         </h6>
       </div>
     </div>

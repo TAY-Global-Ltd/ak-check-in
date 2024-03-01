@@ -27,7 +27,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    box-shadow: 0 0 20px #01B800;
+    box-shadow: 0 0 60px #c0c0c03b;
   }
 
   .modal-content h1 {
