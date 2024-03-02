@@ -14,19 +14,19 @@ const KeyInputModal = ({ isOpen, onClose }) => {
   };
 
   const handleSave = async () => {
-    if (key.trim() === "") {
-      setError("Key cannot be empty!");
+    if (key.length < 3) {
+      setError("Please enter minimum 3 characters!");
       return;
     }
 
     try {
-        const hashedName = await hashString(key);
-        localStorage.setItem("encryption_key", hashedName);
-        onClose();
-      } catch (error) {
-        console.error("Error hashing the key:", error);
-        setError("Error hashing the key");
-      }
+      const hashedName = await hashString(key);
+      localStorage.setItem("encryption_key", hashedName);
+      onClose();
+    } catch (error) {
+      console.error("Error hashing the key:", error);
+      setError("Error hashing the key");
+    }
   };
 
   if (!isOpen) return null;
@@ -51,7 +51,6 @@ const KeyInputModal = ({ isOpen, onClose }) => {
         </h1>
         <input
           type="text"
-          placeholder="my-unique-key"
           value={key}
           onChange={handleChange}
           className={`key-input ${
