@@ -20,8 +20,9 @@ Create ``.env`` and put that into in the same directory as this README.
 The content should be:
 
 ```
-export PUB_NUB_SUBSCRIBE_KEY=the_subscription_key
-export PUB_NUB_PUBLISH_KEY=the_pubish_key
+export PUB_NUB_SUBSCRIBE_KEY=the_encrypted_subscription_key
+export PUB_NUB_PUBLISH_KEY=the_encrypted_pubish_key
+export AUTHORIZATION_TOKEN=the_encrypted_auth_token
 ```
 
 You can get those keys from your PubNub account and use the below command to encrypt it.
@@ -51,8 +52,10 @@ python mock_server.py
 
 To get the initial state. This represent the current state of the screen used when the UI first initialises. 
 
+Make sure to replace ``MY_DUMMY_TOKEN`` with your token encrypted in ``.env``
+
 ```
-curl http://127.0.0.1:8765/initial_state 
+curl -H "Content-Type: application/json" -H "Authorization: Bearer MY_DUMMY_TOKEN" http://127.0.0.1:8765/initial_state 
 ```
 
 Example output: 
@@ -70,34 +73,12 @@ The settings are as follows:
 * ``icon``: The icon for the webapp
 * ``timezone``: The timezone of the gym. For example ``Europe/London``
 
-### Get Event By ID
-
-As we can see above, check ins are associated with events. The UI can request information about the event.
-
-```
-curl "http://127.0.0.1:8765/event?event_id=event-1"
-```
-
-Example output:
-
-```
-{"id":"event-1","title":"BJJ","description":"BJJ Fundamentals","start_time":"18:00","end_time":"19:30","icon":"bjj","icon_type":"internal"} 
-```
-
-On top of the Restful service the mocker server provides, it also pumps out messages to PubNub.
-
-The below are example outputs in the terminal of messages being publishes on intervals.
-
-The ``initial_state`` request will include additional check ins if the UI requests for it
-(i.e. refreshing the webpage).
-
-
 ### Get Current Event
 
 To get the event of the current class
 
 ```
-curl http://127.0.0.1:8765/current_event
+curl -H "Content-Type: application/json" -H "Authorization: Bearer MY_DUMMY_TOKEN" http://127.0.0.1:8765/current_event
 ```
 
 Example Output:
@@ -124,7 +105,7 @@ http://127.0.0.1:8765/static/images/bjj.png
 To get the event of the current class
 
 ```
-curl http://127.0.0.1:8765/next_event
+curl -H "Content-Type: application/json" -H "Authorization: Bearer MY_DUMMY_TOKEN" http://127.0.0.1:8765/next_event
 ```
 
 Example Output:
