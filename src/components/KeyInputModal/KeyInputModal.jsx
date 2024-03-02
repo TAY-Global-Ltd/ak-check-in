@@ -20,12 +20,12 @@ const KeyInputModal = ({ isOpen, onClose }) => {
     }
 
     try {
-      const hashedName = await hashString(key);
-      localStorage.setItem("encryption_key", hashedName);
+      const hashedToken = await hashString(key);
+      localStorage.setItem("authorization_token", hashedToken);
       onClose();
     } catch (error) {
-      console.error("Error hashing the key:", error);
-      setError("Error hashing the key");
+      console.error("Error hashing the token:", error);
+      setError("Error hashing the token");
     }
   };
 

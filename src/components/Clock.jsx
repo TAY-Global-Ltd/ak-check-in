@@ -36,7 +36,11 @@ const Clock = () => {
           : "dark-bg-primary dark-box-shadow"
       }`}
     >
-      <img src={checkInData?.settings.icon} className="logo" alt="ak-logo" />
+      <img
+        src={checkInData?.settings.icon}
+        className="logo"
+        alt="ak-logo"
+      />
       <h4 style={{ margin: "0" }}>
         <span>{timeParts[0]}:</span>
         <span>{timeParts[1]}:</span>

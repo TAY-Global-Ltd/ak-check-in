@@ -1,7 +1,16 @@
-const baseUrl = process.env.REACT_APP_CHECKIN_API_SERVER_URL
+const baseUrl = process.env.REACT_APP_CHECKIN_API_SERVER_URL;
+// const authToken = process.env.AUTHORIZATION_TOKEN;
 
 const responseHandler = async (url) => {
-  const res = await fetch(`${baseUrl}${url}`);
+  const authToken = localStorage.getItem('authorization_token');
+  console.log('~~~ responseHandler authToken', authToken)
+
+  const res = await fetch(`${baseUrl}${url}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
   if (res.status === 200) {
     const data = await res.json();
     return data;

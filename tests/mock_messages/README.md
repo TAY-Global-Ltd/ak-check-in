@@ -23,7 +23,7 @@ The content should be:
 export PUB_NUB_SUBSCRIBE_KEY=the_encrypted_subscription_key
 export PUB_NUB_PUBLISH_KEY=the_encrypted_pubish_key
 export AUTHORIZATION_TOKEN=the_encrypted_auth_token
-```
+``` 
 
 You can get those keys from your PubNub account and use the below command to encrypt it.
 

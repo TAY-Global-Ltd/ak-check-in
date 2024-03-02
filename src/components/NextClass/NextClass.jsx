@@ -32,7 +32,11 @@ const NextClass = () => {
       >
         <img
           src={icon}
-          style={{ width: "30px", marginTop: "6px" }}
+          style={{
+            width: "30px",
+            marginTop: "6px",
+            height: icon ? "" : "30px",
+          }}
           alt="next class icon"
         />
         <h4 style={{ margin: "0" }}>{title}</h4>

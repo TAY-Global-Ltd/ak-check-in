@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import UsersTable from "./UsersTable/UsersTable";
 import NextClass from "./NextClass/NextClass";
 import Clock from "./Clock";
@@ -7,7 +8,7 @@ import CurrentClass from "./CurrentClass/CurrentClass";
 import { useCheckInContext } from "../context/CheckInContext";
 import lightBackground from "../assets/ak-light-bg.png";
 import darkBackground from "../assets/ak-background.png";
-import KeyInputModal from './KeyInputModal/KeyInputModal'
+import KeyInputModal from "./KeyInputModal/KeyInputModal";
 import "../global.css";
 
 const CheckInPage = () => {
@@ -16,8 +17,8 @@ const CheckInPage = () => {
   const [showKeyModal, setShowKeyModal] = useState(false);
 
   useEffect(() => {
-    const hasEncryptionKey = localStorage.getItem('encryption_key') !== null;
-    if (!hasEncryptionKey) {
+    const hasAuthToken = localStorage.getItem("authorization_token") !== null;
+    if (!hasAuthToken) {
       setShowKeyModal(true);
     }
   }, []);
