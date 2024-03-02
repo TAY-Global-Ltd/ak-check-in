@@ -2,44 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import "./Modal.css";
 import { useCheckInContext } from "../../context/CheckInContext";
-import { checkStudentsStatus } from "../../utils/studentSorting";
 
 const Modal = () => {
-  const { message, lightMode, students } = useCheckInContext();
+  const { message, lightMode } = useCheckInContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const queryClient = useQueryClient();
 
-  const { checkedIn } = checkStudentsStatus(students);
-
   const isCheckedIn = newMessage?.status === "checkedin";
-
-  // console.log("~~~ message !== newMessage", message !== newMessage);
-  // console.log("~~~ checkedIn", checkedIn);
 
   useEffect(() => {
     if (message && message !== newMessage) {
       setNewMessage(message);
     }
   }, [message, newMessage]);
-
-  // useEffect(() => {
-  //   if (newMessage && newMessage.status === "checkedin") {
-  //     // Check if the student is already in the list of checked-in students
-  //     if (!checkedIn.find((student) => student["user-id"] === newMessage["user-id"])) {
-  //       // console.log('~~~ show modal')
-  //       setIsModalVisible(true);
-
-  //       // Automatically hide the modal after 3 seconds
-  //       const timeoutId = setTimeout(() => {
-  //         setIsModalVisible(false);
-  //       }, 3000);
-
-  //       return () => clearTimeout(timeoutId);
-  //     }
-  //     // console.log('~~~ DONT show modal')
-  //   }
-  // }, [newMessage, checkedIn]);
 
   useEffect(() => {
     if (newMessage && isCheckedIn) {

@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PubNub from "pubnub";
 
@@ -8,6 +14,7 @@ import {
   getNextClassData,
 } from "../services/getCheckInData";
 import { isClassOver } from "../utils/time";
+import { usePubNubMessage } from "../hooks/usePubNubMessage";
 
 const CheckInContext = createContext();
 
@@ -20,43 +27,51 @@ export const useCheckInContext = () => {
 };
 
 const CheckInProvider = ({ children }) => {
-  const [message, setMessage] = useState(null);
   const [students, setStudents] = useState(null);
   const [lightMode, setLightMode] = useState(false);
   const queryClient = useQueryClient();
+  const { message, handleMessage } = usePubNubMessage();
 
-  const handleMessage = (message) => {
-    if (!checkInData) {
-      return;
-    }
-
-    const { status, "user-id": userId, ...userData } = message;
-
-    if (status === "cancelled") {
-      // Remove user from the list
-      removeUser(userId);
-    } else {
-      // Check if the user already exists in the list
-      const existingUser = students.find((user) => user["user-id"] === userId);
-
-      if (existingUser) {
-        // User already exists in the list, update status if it's different
-        if (existingUser.status !== status) {
-          const updatedStudents = students.map((user) =>
-            user["user-id"] === userId ? { ...user, status, ...userData } : user
-          );
-          setStudents(updatedStudents);
-        }
-      } else {
-        // User not found in the list, add the user
-        setStudents((prevStudents) => [
-          ...prevStudents,
-          { "user-id": userId, ...userData, status },
-        ]);
+  const handleIncomingMessage = useCallback(
+    (message, checkInData) => {
+      if (!checkInData) {
+        return;
       }
-    }
-    setMessage(message);
-  };
+
+      const { status, "user-id": userId, ...userData } = message;
+
+      if (status === "cancelled") {
+        removeUser(userId);
+      } else {
+        // Check if the user already exists in the list
+        const existingUserIndex = students.findIndex(
+          (user) => user["user-id"] === userId
+        );
+
+        if (existingUserIndex !== -1) {
+          // User already exists in the list, update status if it's different
+          if (students[existingUserIndex].status !== status) {
+            const updatedStudents = [...students];
+            updatedStudents[existingUserIndex] = {
+              "user-id": userId,
+              ...userData,
+              status,
+            };
+            setStudents(updatedStudents);
+            handleMessage(message);
+          }
+        } else {
+          // User not found in the list, add the user
+          setStudents((prevStudents) => [
+            ...prevStudents,
+            { "user-id": userId, ...userData, status },
+          ]);
+          handleMessage(message);
+        }
+      }
+    },
+    [handleMessage, students]
+  );
 
   const removeUser = (userId) => {
     setStudents((prevStudents) =>
@@ -89,7 +104,7 @@ const CheckInProvider = ({ children }) => {
         }
       },
       message: function (event) {
-        setMessage(event.message);
+        handleMessage(event.message);
       },
     });
 
@@ -167,12 +182,11 @@ const CheckInProvider = ({ children }) => {
     }
   }, [currentClassData, queryClient]);
 
-  // handle message once received from Pubnub
   useEffect(() => {
-    if (!!message) {
-      handleMessage(message);
+    if (message && checkInData) {
+      handleIncomingMessage(message, checkInData);
     }
-  }, [message]);
+  }, [message, checkInData, handleIncomingMessage]);
 
   // Theme toggle
   const toggleTheme = () => {

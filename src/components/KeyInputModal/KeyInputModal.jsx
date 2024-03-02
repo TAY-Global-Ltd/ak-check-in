@@ -9,11 +9,6 @@ const KeyInputModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const { lightMode } = useCheckInContext();
 
-  const browserName = navigator.appName;
-  const platform = navigator.platform;
-  console.log("Browser Name:", browserName);
-  console.log("Platform:", platform);
-
   const handleChange = (e) => {
     setKey(e.target.value);
   };
