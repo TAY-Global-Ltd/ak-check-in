@@ -1,14 +1,19 @@
+import CryptoJS from "crypto-js";
+import { key } from '../utils/encrypt'
+
 const baseUrl = process.env.REACT_APP_CHECKIN_API_SERVER_URL;
-// const authToken = process.env.AUTHORIZATION_TOKEN;
 
 const responseHandler = async (url) => {
-  const authToken = localStorage.getItem('authorization_token');
-  console.log('~~~ responseHandler authToken', authToken)
+  const localStoreToken = localStorage.getItem('authorization_token');
+  // Decrypt the string using AES decryption
+  const bytes = CryptoJS.AES.decrypt(localStoreToken, key, { mode: CryptoJS.mode.ECB });
+  // Convert the decrypted bytes to a UTF-8 string
+  const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
 
   const res = await fetch(`${baseUrl}${url}`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${authToken}`,
+      Authorization: `Bearer ${decryptedToken}`,
     },
   });
   if (res.status === 200) {

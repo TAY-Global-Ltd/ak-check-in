@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useCheckInContext } from "../../context/CheckInContext";
-import { hashString } from "../../utils/hash";
+import { encryptKey } from "../../utils/encrypt";
 import "./KeyInputModal.css";
 
 const KeyInputModal = ({ isOpen, onClose }) => {
@@ -19,14 +19,9 @@ const KeyInputModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    try {
-      const hashedToken = await hashString(key);
-      localStorage.setItem("authorization_token", hashedToken);
+    const encryptedToken = encryptKey(key);
+      localStorage.setItem("authorization_token", encryptedToken);
       onClose();
-    } catch (error) {
-      console.error("Error hashing the token:", error);
-      setError("Error hashing the token");
-    }
   };
 
   if (!isOpen) return null;

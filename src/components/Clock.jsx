@@ -15,11 +15,11 @@ const Clock = () => {
   }, []);
 
   const formattedDate = new Intl.DateTimeFormat("en-GB", {
-    timeZone: checkInData?.settings.timezone,
+    timeZone: checkInData?.settings?.timezone,
     dateStyle: "medium",
   }).format(currentTime);
   const formattedTime = new Intl.DateTimeFormat("en-GB", {
-    timeZone: checkInData?.settings.timezone,
+    timeZone: checkInData?.settings?.timezone,
     hour12: false,
     hour: "2-digit",
     minute: "2-digit",
