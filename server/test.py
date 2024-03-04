@@ -4,6 +4,9 @@ from pprint import pprint
 from settings import TABLE_MAP
 import requests
 from datetime import datetime
+import pytest
+import json
+
 
 stage = "uat"
 event = {"requestContext": {"stage": stage}}
@@ -28,6 +31,26 @@ def test_initial_state():
     h = lambda_function.Handler(db, stage)
     events = h.initial_state()
     pprint(events)
+
+
+def test_initial_state():
+    event = {
+        "path": "/initial_state",
+        "requestContext": {
+            "stage": "uat",
+        },
+        "headers": {"AUTHORIZATION": "Bearer MY_DUMMY_TOKEN"},
+    }
+
+    res = lambda_function.lambda_handler(event, None)
+    body = json.loads(res["body"])
+    expected = {"settings", "subscription_info", "attendees"}
+    assert set(body.keys()) == expected
+
+    event["headers"]["AUTHORIZATION"] = "Bearer BAD_TOKEN"
+
+    with pytest.raises(lambda_function.AuthorizationError):
+        lambda_function.lambda_handler(event, None)
 
 
 def test_checkin():
