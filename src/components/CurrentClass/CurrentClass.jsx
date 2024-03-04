@@ -29,10 +29,12 @@ const CurrentClass = () => {
         />
         <h1 className="title">{title}</h1>
       </div>
-      <h4 style={{margin: "0"}} >{description}</h4>
+      <h4 style={{ margin: "0" }}>{description}</h4>
       <h4>
         Signed up: <strong>{totalCount}</strong> / Checked in:{" "}
-        <strong>{checkedIn.length}</strong>
+        <strong style={{ color: "var(--main-color)" }}>
+          {checkedIn.length}
+        </strong>
         <br />
         {start_time}-{end_time}
       </h4>

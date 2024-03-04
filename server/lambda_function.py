@@ -34,6 +34,12 @@ pnconfig.publish_key = get_secret("PUB_NUB_PUBLISH_KEY")
 pnconfig.user_id = PUB_NUB_USER_ID
 pubnub = PubNub(pnconfig)
 
+AUTHORIZATION_TOKEN = get_secret("AUTHORIZATION_TOKEN")
+
+
+class AuthorizationError(Exception):
+    pass
+
 
 def expose(f):
     f._IS_EXPOSED = True
@@ -157,7 +163,7 @@ class Handler:
             signups = self._signed_ups(event_id)
 
             for _s, u in signups:
-                users[u.email()] = (u, 'signedup')
+                users[u.email()] = (u, "signedup")
 
             dt = parser.parse(event["start_dt"]).date()
             folder = self._checkin_folder(event_id, dt)
@@ -165,11 +171,10 @@ class Handler:
             for user_id in self.db.ls(folder):
 
                 u = self.db["/users/" + user_id]
-                users[u.email()] = (u, 'checkedin')
+                users[u.email()] = (u, "checkedin")
 
             res += [
-                self._process_action(event_id, u, stars, s)
-                for u, s in users.values()
+                self._process_action(event_id, u, stars, s) for u, s in users.values()
             ]
 
         return res
@@ -238,6 +243,11 @@ def get_params(event, key):
 
     return {}
 
+def _check_authorization(event):
+    _auth_type, token = event["headers"].get("Authorization").split(' ')
+    if AUTHORIZATION_TOKEN != token:
+        raise AuthorizationError("Unauthorized")
+
 
 def lambda_handler(event, context):
     print(event)
@@ -246,6 +256,8 @@ def lambda_handler(event, context):
         stage = event["requestContext"]["stage"]
         if stage == "test-invoke-stage":
             stage = "uat"
+        
+        _check_authorization(event)
 
         params = dict(
             **get_params(event, "queryStringParameters"), **get_params(event, "body")

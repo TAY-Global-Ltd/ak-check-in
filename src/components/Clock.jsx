@@ -15,11 +15,11 @@ const Clock = () => {
   }, []);
 
   const formattedDate = new Intl.DateTimeFormat("en-GB", {
-    timeZone: checkInData?.settings.timezone,
+    timeZone: checkInData?.settings?.timezone,
     dateStyle: "medium",
   }).format(currentTime);
   const formattedTime = new Intl.DateTimeFormat("en-GB", {
-    timeZone: checkInData?.settings.timezone,
+    timeZone: checkInData?.settings?.timezone,
     hour12: false,
     hour: "2-digit",
     minute: "2-digit",
@@ -36,7 +36,11 @@ const Clock = () => {
           : "dark-bg-primary dark-box-shadow"
       }`}
     >
-      <img src={checkInData?.settings.icon} className="logo" alt="ak-logo" />
+      <img
+        src={checkInData?.settings.icon}
+        className="logo"
+        alt="ak-logo"
+      />
       <h4 style={{ margin: "0" }}>
         <span>{timeParts[0]}:</span>
         <span>{timeParts[1]}:</span>

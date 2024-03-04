@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useCheckInContext } from "../../context/CheckInContext";
-import { hashString } from "../../utils/hash";
+import { encryptKey } from "../../utils/encrypt";
 import "./KeyInputModal.css";
 
 const KeyInputModal = ({ isOpen, onClose }) => {
@@ -14,19 +14,14 @@ const KeyInputModal = ({ isOpen, onClose }) => {
   };
 
   const handleSave = async () => {
-    if (key.trim() === "") {
-      setError("Key cannot be empty!");
+    if (key.length < 3) {
+      setError("Please enter minimum 3 characters!");
       return;
     }
 
-    try {
-        const hashedName = await hashString(key);
-        localStorage.setItem("encryption_key", hashedName);
-        onClose();
-      } catch (error) {
-        console.error("Error hashing the key:", error);
-        setError("Error hashing the key");
-      }
+    const encryptedToken = encryptKey(key);
+      localStorage.setItem("authorization_token", encryptedToken);
+      onClose();
   };
 
   if (!isOpen) return null;
@@ -51,7 +46,6 @@ const KeyInputModal = ({ isOpen, onClose }) => {
         </h1>
         <input
           type="text"
-          placeholder="my-unique-key"
           value={key}
           onChange={handleChange}
           className={`key-input ${
