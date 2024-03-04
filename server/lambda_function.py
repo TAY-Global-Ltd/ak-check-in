@@ -244,7 +244,7 @@ def get_params(event, key):
     return {}
 
 def _check_authorization(event):
-    _auth_type, token = event["headers"].get("AUTHORIZATION").split(' ')
+    _auth_type, token = event["headers"].get("Authorization").split(' ')
     if AUTHORIZATION_TOKEN != token:
         raise AuthorizationError("Unauthorized")
 
