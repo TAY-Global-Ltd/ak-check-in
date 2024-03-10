@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import { useCheckInContext } from "../../context/CheckInContext";
 import { encryptKey } from "../../utils/encrypt";
 import "./KeyInputModal.css";
@@ -8,6 +10,7 @@ const KeyInputModal = ({ isOpen, onClose }) => {
   const [key, setKey] = useState("");
   const [error, setError] = useState("");
   const { lightMode } = useCheckInContext();
+  const queryClient = useQueryClient();
 
   const handleChange = (e) => {
     setKey(e.target.value);
@@ -20,8 +23,9 @@ const KeyInputModal = ({ isOpen, onClose }) => {
     }
 
     const encryptedToken = encryptKey(key);
-      localStorage.setItem("authorization_token", encryptedToken);
-      onClose();
+    localStorage.setItem("authorization_token", encryptedToken);
+    queryClient.invalidateQueries("");
+    onClose();
   };
 
   if (!isOpen) return null;
