@@ -206,6 +206,7 @@ const CheckInProvider = ({ children }) => {
         checkInIsLoading,
         currentClassIsLoading,
         nextClassIsLoading,
+        checkInError,
       }}
     >
       {children}

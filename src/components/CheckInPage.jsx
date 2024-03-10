@@ -12,7 +12,7 @@ import KeyInputModal from "./KeyInputModal/KeyInputModal";
 import "../global.css";
 
 const CheckInPage = () => {
-  const { lightMode, checkInData } = useCheckInContext();
+  const { lightMode, checkInData, checkInError } = useCheckInContext();
   const backgroundImage = lightMode ? lightBackground : darkBackground;
   const [showKeyModal, setShowKeyModal] = useState(false);
 
@@ -21,7 +21,14 @@ const CheckInPage = () => {
     if (!hasAuthToken) {
       setShowKeyModal(true);
     }
-  }, []);
+
+    // show auth key modal if token invalid
+    if (!!hasAuthToken && checkInError) {
+      // clear localStore
+      localStorage.setItem("authorization_token", null);
+      setShowKeyModal(true);
+    }
+  }, [checkInError]);
 
   const closeKeyModal = () => {
     setShowKeyModal(false);
