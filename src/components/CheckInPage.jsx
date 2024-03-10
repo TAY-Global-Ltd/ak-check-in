@@ -17,7 +17,7 @@ const CheckInPage = () => {
   const [showKeyModal, setShowKeyModal] = useState(false);
 
   useEffect(() => {
-    const hasAuthToken = localStorage.getItem("authorization_token") !== null;
+    const hasAuthToken = localStorage.getItem("authorization_token") !== "null";
     if (!hasAuthToken) {
       setShowKeyModal(true);
     }
