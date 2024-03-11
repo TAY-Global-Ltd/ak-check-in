@@ -11,6 +11,14 @@ const KeyInputModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const { lightMode } = useCheckInContext();
   const queryClient = useQueryClient();
+  const [masked, setMasked] = useState(true);
+
+  const authToken = localStorage.getItem("authorization_token");
+  const hasAuthToken = localStorage.getItem("authorization_token") !== "null";
+
+  const toggleMask = () => {
+    setMasked(!masked);
+  };
 
   const handleChange = (e) => {
     setKey(e.target.value);
@@ -48,14 +56,20 @@ const KeyInputModal = ({ isOpen, onClose }) => {
         <h1 className="key-title">
           Enter <span style={{ color: "var(--main-color" }}>Unique</span> Key
         </h1>
-        <input
-          type="text"
-          value={key}
-          onChange={handleChange}
-          className={`key-input ${
-            lightMode ? "light-bg-primary" : "dark-bg-primary"
-          }`}
-        />
+        <div className="input-wrapper">
+          <input
+            type={masked ? "password" : "text"}
+            value={hasAuthToken ? authToken : key}
+            onChange={handleChange}
+            id="passwordInput"
+            className={`key-input ${
+              lightMode ? "light-bg-primary" : "dark-bg-primary"
+            }`}
+          />
+          <span onClick={toggleMask} className="toggle-mask">
+            {masked ? "show" : "hide"}
+          </span>
+        </div>
         <button
           onClick={handleSave}
           className={`key-button ${
