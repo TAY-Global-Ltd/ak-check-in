@@ -88,3 +88,9 @@ PUBLIC_URL_MAP = {
     "uat": "https://uat.my-app.com/",
     "prod": "https://my-app.com/",
 }
+
+DISTRIBUTION_ID_MAP = {
+    "dev": "DISTABCDE123",
+    "uat": "DISTABCDE456",
+    "prod": "DISTABCDE789",
+}
