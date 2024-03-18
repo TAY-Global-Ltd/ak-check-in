@@ -42,34 +42,33 @@ const CheckInProvider = ({ children }) => {
 
       if (status === "cancelled") {
         removeUser(userId);
-        // Check if the user already exists in the list
-        const existingUserIndex = students.findIndex(
-          (user) => user["user-id"] === userId
-        );
+      }
 
-        if (existingUserIndex !== -1) {
-          // User already exists in the list, update status if it's different
-          if (students[existingUserIndex].status !== status) {
-            const updatedStudents = [...students];
-            updatedStudents[existingUserIndex] = {
-              "user-id": userId,
-              ...userData,
-              status,
-            };
-            setStudents(updatedStudents);
-            handleMessage(message);
-          }
-        } else {
-          // User not found in the list, add the user
-          setStudents((prevStudents) => [
-            ...prevStudents,
-            { "user-id": userId, ...userData, status },
-          ]);
-          handleMessage(message);
+      // Check if the user already exists in the list
+      const existingUserIndex = students.findIndex(
+        (user) => user["user-id"] === userId
+      );
+
+      if (existingUserIndex !== -1) {
+        // User already exists in the list, update status if it's different
+        if (students[existingUserIndex].status !== status) {
+          const updatedStudents = [...students];
+          updatedStudents[existingUserIndex] = {
+            "user-id": userId,
+            ...userData,
+            status,
+          };
+          setStudents(updatedStudents);
         }
+      } else {
+        // User not found in the list, add the user
+        setStudents((prevStudents) => [
+          ...prevStudents,
+          { "user-id": userId, ...userData, status },
+        ]);
       }
     },
-    [handleMessage, students]
+    [students]
   );
 
   const removeUser = (userId) => {
@@ -186,7 +185,7 @@ const CheckInProvider = ({ children }) => {
     if (message && checkInData) {
       handleIncomingMessage(message, checkInData);
     }
-  }, [message, checkInData, handleIncomingMessage]);
+  }, [message, checkInData]);
 
   // Theme toggle
   const toggleTheme = () => {
