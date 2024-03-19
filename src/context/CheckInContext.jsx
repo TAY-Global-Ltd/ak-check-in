@@ -44,35 +44,26 @@ const CheckInProvider = ({ children }) => {
 
       if (status === "cancelled") {
         console.log("~~~ cancelled");
-        removeUser(userId);
+        removeUser(userId, event_id);
+        return; // Return early since the user is removed
       }
 
       // Check if the user already exists in the list
       const existingUserIndex = students.findIndex(
-        (user) => user["user-id"] === userId
+        (user) => user["user-id"] === userId && user.event_id === event_id
       );
 
       if (existingUserIndex !== -1) {
         // User already exists in the list, update status if it's different
-        if (
-          students[existingUserIndex].event_id === event_id &&
-          students[existingUserIndex].status !== status
-        ) {
-          console.log("~~~ existing user , status", status);
+        if (students[existingUserIndex].status !== status) {
           const updatedStudents = [...students];
           updatedStudents[existingUserIndex] = {
             "user-id": userId,
             ...userData,
             status,
+            event_id,
           };
           setStudents(updatedStudents);
-        } else {
-          console.log("~~~ same user, new class");
-          // Add same user for different class
-          setStudents((prevStudents) => [
-            ...prevStudents,
-            { "user-id": userId, ...userData, status, event_id },
-          ]);
         }
       } else {
         console.log("~~~ new user");
@@ -86,9 +77,11 @@ const CheckInProvider = ({ children }) => {
     [students]
   );
 
-  const removeUser = (userId) => {
+  const removeUser = (userId, event_id) => {
     setStudents((prevStudents) =>
-      prevStudents.filter((user) => user["user-id"] !== userId)
+      prevStudents.filter(
+        (user) => user["user-id"] !== userId && user.event_id !== event_id
+      )
     );
   };
 

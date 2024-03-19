@@ -8,7 +8,7 @@ describe("useIncomingMessage", () => {
 
     // Simulate an incoming message
     const message = {
-      status: "checkedIn",
+      status: "checkedin",
       "user-id": "123",
       event_id: "event123",
       name: "Foo",
@@ -39,7 +39,7 @@ describe("useIncomingMessage", () => {
     act(() => {
       result.current.handleIncomingMessage(
         {
-          status: "checkedIn",
+          status: "checkedin",
           "user-id": "123",
           event_id: "event123",
           name: "Foo",
@@ -74,7 +74,7 @@ describe("useIncomingMessage", () => {
     act(() => {
       result.current.handleIncomingMessage(
         {
-          status: "checkedIn",
+          status: "signedup",
           "user-id": "123",
           event_id: "event123",
           name: "Foo",
@@ -85,7 +85,7 @@ describe("useIncomingMessage", () => {
 
     // Simulate an incoming message with updated status
     const message = {
-      status: "checkedOut",
+      status: "checkedin",
       "user-id": "123",
       event_id: "event123",
       name: "Foo",
@@ -110,7 +110,7 @@ describe("useIncomingMessage", () => {
     act(() => {
       result.current.handleIncomingMessage(
         {
-          status: "checkedIn",
+          status: "checkedn",
           "user-id": "123",
           event_id: "123",
           name: "Foo",
@@ -121,7 +121,7 @@ describe("useIncomingMessage", () => {
 
     // Simulate an incoming message with same status but different event_id '456'
     const message = {
-      status: "checkedIn",
+      status: "checkedn",
       "user-id": "123",
       event_id: "456",
       name: "Foo",
