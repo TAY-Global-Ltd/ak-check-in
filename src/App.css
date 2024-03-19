@@ -29,6 +29,8 @@
   font-size: 1em;
   padding: 0 30px 12px 30px;
   border-radius: 6px;
+  min-width: 110px;
+  min-height: 120px;
 }
 
 @media only screen and (max-width: 720px) {

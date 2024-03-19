@@ -38,9 +38,12 @@ const CheckInProvider = ({ children }) => {
         return;
       }
 
-      const { status, "user-id": userId, ...userData } = message;
+      console.log("~~~ message", message);
+
+      const { status, "user-id": userId, event_id, ...userData } = message;
 
       if (status === "cancelled") {
+        console.log("~~~ cancelled");
         removeUser(userId);
       }
 
@@ -51,7 +54,11 @@ const CheckInProvider = ({ children }) => {
 
       if (existingUserIndex !== -1) {
         // User already exists in the list, update status if it's different
-        if (students[existingUserIndex].status !== status) {
+        if (
+          students[existingUserIndex].event_id === event_id &&
+          students[existingUserIndex].status !== status
+        ) {
+          console.log("~~~ existing user , status", status);
           const updatedStudents = [...students];
           updatedStudents[existingUserIndex] = {
             "user-id": userId,
@@ -59,12 +66,20 @@ const CheckInProvider = ({ children }) => {
             status,
           };
           setStudents(updatedStudents);
+        } else {
+          console.log("~~~ same user, new class");
+          // Add same user for different class
+          setStudents((prevStudents) => [
+            ...prevStudents,
+            { "user-id": userId, ...userData, status, event_id },
+          ]);
         }
       } else {
+        console.log("~~~ new user");
         // User not found in the list, add the user
         setStudents((prevStudents) => [
           ...prevStudents,
-          { "user-id": userId, ...userData, status },
+          { "user-id": userId, ...userData, status, event_id },
         ]);
       }
     },
@@ -191,6 +206,9 @@ const CheckInProvider = ({ children }) => {
   const toggleTheme = () => {
     setLightMode((prevMode) => !prevMode);
   };
+
+  console.log("~~~ students", students);
+  console.log("~~~ currentClassData", currentClassData);
 
   return (
     <CheckInContext.Provider
