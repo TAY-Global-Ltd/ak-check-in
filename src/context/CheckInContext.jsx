@@ -28,7 +28,7 @@ export const useCheckInContext = () => {
 
 const CheckInProvider = ({ children }) => {
   const { message, handleMessage } = usePubNubMessage();
-  const [students, setStudents] = useState(null);
+  const [students, setStudents] = useState([]);
   const [lightMode, setLightMode] = useState(false);
   const queryClient = useQueryClient();
 
