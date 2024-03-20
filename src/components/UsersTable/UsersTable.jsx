@@ -73,6 +73,11 @@ const UsersTable = () => {
           </div>
         );
       })}
+      <div style={{ position: "absolute", bottom: "10px", left: "10px" }}>
+        <p style={{ margin: "0", fontSize: "12px", color: "#605F5F" }}>
+          App v: {process.env.REACT_APP_CHECKIN_VERSION}
+        </p>
+      </div>
       <Toggle />
     </div>
   );
