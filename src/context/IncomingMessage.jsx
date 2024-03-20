@@ -23,7 +23,11 @@ const useIncomingMessage = () => {
 
       if (existingUserIndex !== -1) {
         // User already exists in the list, update status if it's different
-        if (students[existingUserIndex].status !== status) {
+        if (
+          Object.keys(students[existingUserIndex]).some(
+            (key) => students[existingUserIndex][key] !== message[key]
+          )
+        ) {
           const updatedStudents = [...students];
           updatedStudents[existingUserIndex] = {
             "user-id": userId,

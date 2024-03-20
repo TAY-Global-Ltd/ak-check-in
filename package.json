@@ -15,7 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "npx jest",
     "eject": "react-scripts eject",
     "deploy": "python deploy.py uat",
     "deploy-prod": "python deploy.py prod"

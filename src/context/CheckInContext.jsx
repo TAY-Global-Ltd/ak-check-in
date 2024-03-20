@@ -38,12 +38,9 @@ const CheckInProvider = ({ children }) => {
         return;
       }
 
-      console.log("~~~ message", message);
-
       const { status, "user-id": userId, event_id, ...userData } = message;
 
       if (status === "cancelled") {
-        console.log("~~~ cancelled");
         removeUser(userId, event_id);
         return; // Return early since the user is removed
       }
@@ -55,7 +52,11 @@ const CheckInProvider = ({ children }) => {
 
       if (existingUserIndex !== -1) {
         // User already exists in the list, update status if it's different
-        if (students[existingUserIndex].status !== status) {
+        if (
+          Object.keys(students[existingUserIndex]).some(
+            (key) => students[existingUserIndex][key] !== message[key]
+          )
+        ) {
           const updatedStudents = [...students];
           updatedStudents[existingUserIndex] = {
             "user-id": userId,
@@ -66,7 +67,6 @@ const CheckInProvider = ({ children }) => {
           setStudents(updatedStudents);
         }
       } else {
-        console.log("~~~ new user");
         // User not found in the list, add the user
         setStudents((prevStudents) => [
           ...prevStudents,
@@ -199,9 +199,6 @@ const CheckInProvider = ({ children }) => {
   const toggleTheme = () => {
     setLightMode((prevMode) => !prevMode);
   };
-
-  console.log("~~~ students", students);
-  console.log("~~~ currentClassData", currentClassData);
 
   return (
     <CheckInContext.Provider

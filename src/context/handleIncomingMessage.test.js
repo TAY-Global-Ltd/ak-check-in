@@ -138,4 +138,40 @@ describe("useIncomingMessage", () => {
     expect(students[0].event_id).toBe("123");
     expect(students[1].event_id).toBe("456");
   });
+
+  it("should update user's name when receiving a message with same user ID and new name", () => {
+    // Render the hook
+    const { result } = renderHook(() => useIncomingMessage());
+
+    // Add a user to the students list
+    act(() => {
+      result.current.handleIncomingMessage(
+        {
+          status: "checkedin",
+          "user-id": "123",
+          event_id: "event123",
+          name: "Old Name",
+        },
+        true
+      );
+    });
+
+    // incoming message with the same user ID but a new name
+    const newMessage = {
+      status: "checkedin",
+      "user-id": "123",
+      event_id: "event123",
+      name: "New Name",
+    };
+    act(() => {
+      result.current.handleIncomingMessage(newMessage, true);
+    });
+
+    // Get the updated students array
+    const { students } = result.current;
+
+    // Assert that the user's name was updated
+    const updatedStudent = students[0];
+    expect(updatedStudent.name).toBe(newMessage.name);
+  });
 });
