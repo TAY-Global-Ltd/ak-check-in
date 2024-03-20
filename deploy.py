@@ -93,6 +93,7 @@ def build(stage):
     env = os.environ.copy()
     env["REACT_APP_CHECKIN_API_SERVER_URL"] = settings.CHECKIN_API_SERVER_URL_MAP[stage]
     env["PUBLIC_URL"] = settings.PUBLIC_URL_MAP[stage]
+    env["REACT_APP_CHECKIN_VERSION"] = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     cmd = ["npm", "run", "build"]
 
