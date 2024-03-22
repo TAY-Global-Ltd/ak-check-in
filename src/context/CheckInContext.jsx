@@ -28,7 +28,7 @@ export const useCheckInContext = () => {
 
 const CheckInProvider = ({ children }) => {
   const { message, handleMessage } = usePubNubMessage();
-  const [students, setStudents] = useState(null);
+  const [students, setStudents] = useState([]);
   const [lightMode, setLightMode] = useState(false);
   const queryClient = useQueryClient();
 
@@ -38,25 +38,31 @@ const CheckInProvider = ({ children }) => {
         return;
       }
 
-      const { status, "user-id": userId, ...userData } = message;
+      const { status, "user-id": userId, event_id, ...userData } = message;
 
       if (status === "cancelled") {
-        removeUser(userId);
+        removeUser(userId, event_id);
+        return; // Return early since the user is removed
       }
 
       // Check if the user already exists in the list
       const existingUserIndex = students.findIndex(
-        (user) => user["user-id"] === userId
+        (user) => user["user-id"] === userId && user.event_id === event_id
       );
 
       if (existingUserIndex !== -1) {
         // User already exists in the list, update status if it's different
-        if (students[existingUserIndex].status !== status) {
+        if (
+          Object.keys(students[existingUserIndex]).some(
+            (key) => students[existingUserIndex][key] !== message[key]
+          )
+        ) {
           const updatedStudents = [...students];
           updatedStudents[existingUserIndex] = {
             "user-id": userId,
             ...userData,
             status,
+            event_id,
           };
           setStudents(updatedStudents);
         }
@@ -64,16 +70,18 @@ const CheckInProvider = ({ children }) => {
         // User not found in the list, add the user
         setStudents((prevStudents) => [
           ...prevStudents,
-          { "user-id": userId, ...userData, status },
+          { "user-id": userId, ...userData, status, event_id },
         ]);
       }
     },
     [students]
   );
 
-  const removeUser = (userId) => {
+  const removeUser = (userId, event_id) => {
     setStudents((prevStudents) =>
-      prevStudents.filter((user) => user["user-id"] !== userId)
+      prevStudents.filter(
+        (user) => user["user-id"] !== userId && user.event_id !== event_id
+      )
     );
   };
 
