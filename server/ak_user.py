@@ -1,5 +1,7 @@
 import base64
 import kydb
+from typing import List
+from datetime import datetime
 
 COLOR_BLACK = 4278190080
 COLOR_WHITE = 4294967295
@@ -34,6 +36,26 @@ class AKUser(kydb.DbObj):
 
     def is_member(self) -> bool:
         return self.is_full_member() or self.is_outdoor_member()
+
+    @kydb.stored
+    def signed_consent_forms(self) -> List[datetime]:
+        return []
+
+    @kydb.stored
+    def payment_email(self) -> str:
+        return ''
+
+    @kydb.stored
+    def telephone(self) -> str:
+        return ''
+
+    @kydb.stored
+    def payment_cust_id(self) -> str:
+        return ''
+
+    @kydb.stored
+    def additional_participants(self) -> str:
+        return []
 
     @staticmethod
     def jwt_decode(token):

@@ -135,12 +135,23 @@ class Handler:
     def _get_stars(self):
         return self.db["/rewards/stars"]
 
-    def _process_action(self, event_id, u, stars, status):
+    def _process_action(self, event_id, u, stars, status, participant_id):
+        participants = u.additional_participants()
+        if participant_id >= 0 and participant_id < len(participants):
+            participant = participants[participant_id]
+            user_id = f'{u.email()}!{participant_id}'
+            alias = participant['alias']
+            icon = 'supervisor_account'
+        else:
+            user_id = u.email()
+            alias = u.alias()
+            icon = "person_check"
+
         return {
             "event_id": event_id,
-            "user-id": u.email(),
-            "name": u.alias(),
-            "icon": "person_check" if u.is_full_member() else "person_cancel",
+            "user-id": user_id,
+            "name": alias,
+            "icon": icon if u.is_full_member() else "person_cancel",
             "icon_type": "material",
             "reward": "⭐" * stars.get(u.email(), 0),
             "status": status,
@@ -210,11 +221,11 @@ class Handler:
         return res.json()["event"]
 
     @expose
-    def user_action(self, event_id, status, user_id):
+    def user_action(self, event_id, status, user_id, participant_id: int=-1):
         u = self.db["/users/" + user_id]
         stars = self._get_stars()
 
-        message = self._process_action(event_id, u, stars, status)
+        message = self._process_action(event_id, u, stars, status, participant_id)
         print(f"Sending message: {message}")
 
         pubnub.publish().channel(PUB_NUB_CHANNEL_MAP[self.stage]).message(

@@ -10,6 +10,10 @@ import json
 
 stage = "uat"
 event = {"requestContext": {"stage": stage}}
+
+BASE_URL = "https://l6odffk4jd.execute-api.eu-west-2.amazonaws.com/uat/"
+CURRENT_EVENT_URL = BASE_URL + "current_event"
+
 db = kydb.connect("dynamodb://" + TABLE_MAP[stage])
 
 
@@ -54,9 +58,7 @@ def test_initial_state():
 
 
 def test_checkin():
-    res = requests.get(
-        "https://l6odffk4jd.execute-api.eu-west-2.amazonaws.com/uat/current_event"
-    )
+    res = requests.get(CURRENT_EVENT_URL)
     event_id = res.json()["id"]
     event = {
         "stage": "uat",
@@ -69,8 +71,46 @@ def test_checkin():
     }
     lambda_function.lambda_handler(event, None)
 
+def set_user(is_member=True):
+    user = db["/users/demo-user@artillerykai.co.uk"]
+    user.is_full_member.setvalue(is_member)
+    user.additional_participants.setvalue([
+        {
+            "name": "Baki Smith",
+            "alias": "Baki-kun",
+            "birthday": "2012-03-01",
+            "gender": "male",
+        },
+        {
+            "name": "Sakura Smith",
+            "alias": "Sakura-chan",
+            "birthday": "2015-02-05",
+            "gender": "female",
+        }
+    ])
+    user.write()
+
+def test_signup():
+    set_user()
+    h = lambda_function.Handler(db, stage)
+    event = h.current_event()
+
+    event_id = event["id"]
+    event = {
+        "stage": "uat",
+        "method": "user_action",
+        "kwargs": {
+            "event_id": event_id,
+            "status": "signedup",
+            "user_id": "demo-user@artillerykai.co.uk",
+            # Sign in the first child
+            "participant_id": 0
+        },
+    }
+    lambda_function.lambda_handler(event, None)
 
 if __name__ == "__main__":
-    test_initial_state()
+    # test_initial_state()
     # test_current_next_event()
     # test_checkin()
+    test_signup()
