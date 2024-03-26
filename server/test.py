@@ -43,23 +43,24 @@ def test_initial_state():
         "requestContext": {
             "stage": "uat",
         },
-        "headers": {"AUTHORIZATION": "Bearer MY_DUMMY_TOKEN"},
+        "headers": {"Authorization": "Bearer MY_DUMMY_TOKEN"},
     }
 
     res = lambda_function.lambda_handler(event, None)
     body = json.loads(res["body"])
+    print(body)
     expected = {"settings", "subscription_info", "attendees"}
     assert set(body.keys()) == expected
 
-    event["headers"]["AUTHORIZATION"] = "Bearer BAD_TOKEN"
+    event["headers"]["Authorization"] = "Bearer BAD_TOKEN"
 
     with pytest.raises(lambda_function.AuthorizationError):
         lambda_function.lambda_handler(event, None)
 
 
 def test_checkin():
-    res = requests.get(CURRENT_EVENT_URL)
-    event_id = res.json()["id"]
+    event_id = _get_curr_event_id()
+    # Checkin parent
     event = {
         "stage": "uat",
         "method": "user_action",
@@ -70,6 +71,25 @@ def test_checkin():
         },
     }
     lambda_function.lambda_handler(event, None)
+
+    # Checkin child
+    event = {
+        "stage": "uat",
+        "method": "user_action",
+        "kwargs": {
+            "event_id": event_id,
+            "status": "checkedin",
+            "user_id": "demo-user@artillerykai.co.uk",
+            "participant_id": 0
+        },
+    }
+    lambda_function.lambda_handler(event, None)
+
+def _get_curr_event_id():
+    h = lambda_function.Handler(db, stage)
+    event = h.current_event()
+
+    return event["id"]
 
 def set_user(is_member=True):
     user = db["/users/demo-user@artillerykai.co.uk"]
@@ -91,11 +111,8 @@ def set_user(is_member=True):
     user.write()
 
 def test_signup():
-    set_user()
-    h = lambda_function.Handler(db, stage)
-    event = h.current_event()
-
-    event_id = event["id"]
+    # set_user()
+    event_id = _get_curr_event_id()
     event = {
         "stage": "uat",
         "method": "user_action",
@@ -103,14 +120,15 @@ def test_signup():
             "event_id": event_id,
             "status": "signedup",
             "user_id": "demo-user@artillerykai.co.uk",
-            # Sign in the first child
-            "participant_id": 0
+            # Sign in the Second child
+            "participant_id": 1
         },
     }
     lambda_function.lambda_handler(event, None)
 
 if __name__ == "__main__":
-    # test_initial_state()
+    test_initial_state()
     # test_current_next_event()
     # test_checkin()
-    test_signup()
+    # test_signup()
+

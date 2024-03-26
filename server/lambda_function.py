@@ -60,7 +60,7 @@ class Handler:
     def _signed_ups(self, event_id):
         folder = self._signup_folder(event_id)
         signups = (self.db[folder + "/" + x] for x in self.db.ls(folder))
-        return [(x, x.user()) for x in signups]
+        return [(x, x.user(), x.participant_id()) for x in signups]
 
     def _today(self):
         return datetime.now(TIME_ZONE).date()
@@ -120,7 +120,7 @@ class Handler:
     @expose
     def initial_state(self):
         today = self._today()
-        attendees = self._list(today, today)
+        attendees = self._list(today, today + timedelta(days=1))
 
         return {
             "settings": SETTINGS,
@@ -173,19 +173,22 @@ class Handler:
             event_id = event["id"]
             signups = self._signed_ups(event_id)
 
-            for _s, u in signups:
-                users[u.email()] = (u, "signedup")
+            for _s, u, pid in signups:
+                users[u.email()] = (u, pid, "signedup")
 
             dt = parser.parse(event["start_dt"]).date()
             folder = self._checkin_folder(event_id, dt)
 
             for user_id in self.db.ls(folder):
+                if '!' in user_id:
+                    user_id, pid = user_id.split('!')
+                    pid = int(pid)
 
                 u = self.db["/users/" + user_id]
-                users[u.email()] = (u, "checkedin")
+                users[u.email()] = (u, pid, "checkedin")
 
             res += [
-                self._process_action(event_id, u, stars, s) for u, s in users.values()
+                self._process_action(event_id, u, stars, s, pid) for u, pid, s in users.values()
             ]
 
         return res

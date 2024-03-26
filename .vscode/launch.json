@@ -8,7 +8,7 @@
             "name": "Python Debugger: Test Lambda",
             "type": "debugpy",
             "request": "launch",
-            "program": "/home/ubuntu/code/ak-check-in/server/test.py",
+            "program": "${workspaceFolder}/server/test.py",
             "console": "integratedTerminal"
         }
     ]
