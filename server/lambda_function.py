@@ -20,6 +20,7 @@ from settings import (
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from typing import Optional
+import boto3
 
 TIME_ZONE = pytz.timezone(TIME_ZONE_NAME)
 
@@ -58,9 +59,26 @@ class Handler:
         self.check_in_minutes_before = 15
 
     def _signed_ups(self, event_id):
-        folder = self._signup_folder(event_id)
-        signups = (self.db[folder + "/" + x] for x in self.db.ls(folder))
-        return [(x, x.user()) for x in signups]
+        client = boto3.client("lambda")
+        payload = {
+            "stage": self.stage,
+            "method": "signups_for_event",
+            "kwargs": {"event_id": event_id, "is_privilaged": True},
+            "user_id": "demo-user@artillerykai.co.uk",
+        }
+        payload = json.dumps(payload).encode()
+
+        AK_CLASS_TIMETABLE_LAMBDA_MAP = {
+            "prod": "ak-class-timetable",
+            "uat": "ak-class-timetable-uat",
+        }
+
+        res = client.invoke(
+            FunctionName=AK_CLASS_TIMETABLE_LAMBDA_MAP[self.stage],
+            InvocationType="RequestResponse",
+            Payload=payload,
+        )
+        return json.loads(json.loads(res["Payload"].read())["body"])
 
     def _today(self):
         return datetime.now(TIME_ZONE).date()
@@ -120,7 +138,7 @@ class Handler:
     @expose
     def initial_state(self):
         today = self._today()
-        attendees = self._list(today, today)
+        attendees = self._list(today, today + timedelta(days=1))
 
         return {
             "settings": SETTINGS,
@@ -135,12 +153,23 @@ class Handler:
     def _get_stars(self):
         return self.db["/rewards/stars"]
 
-    def _process_action(self, event_id, u, stars, status):
+    def _process_action(self, event_id, u, stars, status, participant_id):
+        participants = u.additional_participants()
+        if participant_id >= 0 and participant_id < len(participants):
+            participant = participants[participant_id]
+            user_id = f"{u.email()}!{participant_id}"
+            alias = participant["alias"]
+            icon = "supervisor_account"
+        else:
+            user_id = u.email()
+            alias = u.alias()
+            icon = "person_check"
+
         return {
             "event_id": event_id,
-            "user-id": u.email(),
-            "name": u.alias(),
-            "icon": "person_check" if u.is_full_member() else "person_cancel",
+            "user-id": user_id,
+            "name": alias,
+            "icon": icon if u.is_full_member() else "person_cancel",
             "icon_type": "material",
             "reward": "⭐" * stars.get(u.email(), 0),
             "status": status,
@@ -162,25 +191,29 @@ class Handler:
             event_id = event["id"]
             signups = self._signed_ups(event_id)
 
-            for _s, u in signups:
-                users[u.email()] = (u, "signedup")
+            for su in signups:
+                u = self.db["/users/" + su['email']]
+                pid = su['participant_id']
+                users[f"{u.email()}!{pid}"] = (u, pid, "signedup")
 
             dt = parser.parse(event["start_dt"]).date()
             folder = self._checkin_folder(event_id, dt)
 
             for user_id in self.db.ls(folder):
+                key = user_id
+                if "!" in user_id:
+                    user_id, pid = user_id.split("!")
+                    pid = int(pid)
 
                 u = self.db["/users/" + user_id]
-                users[u.email()] = (u, "checkedin")
+                users[key] = (u, pid, "checkedin")
 
             res += [
-                self._process_action(event_id, u, stars, s) for u, s in users.values()
+                self._process_action(event_id, u, stars, s, pid)
+                for u, pid, s in users.values()
             ]
 
         return res
-
-    def _signup_folder(self, event_id):
-        return f"/signups/{event_id}"
 
     def _checkin_folder(self, evt_id, dt: date):
         return f"/checkins/{dt}/{evt_id}/"
@@ -210,11 +243,11 @@ class Handler:
         return res.json()["event"]
 
     @expose
-    def user_action(self, event_id, status, user_id):
+    def user_action(self, event_id, status, user_id, participant_id: int = -1):
         u = self.db["/users/" + user_id]
         stars = self._get_stars()
 
-        message = self._process_action(event_id, u, stars, status)
+        message = self._process_action(event_id, u, stars, status, participant_id)
         print(f"Sending message: {message}")
 
         pubnub.publish().channel(PUB_NUB_CHANNEL_MAP[self.stage]).message(
@@ -243,8 +276,9 @@ def get_params(event, key):
 
     return {}
 
+
 def _check_authorization(event):
-    _auth_type, token = event["headers"].get("Authorization").split(' ')
+    _auth_type, token = event["headers"].get("Authorization").split(" ")
     if AUTHORIZATION_TOKEN != token:
         raise AuthorizationError("Unauthorized")
 
@@ -256,7 +290,7 @@ def lambda_handler(event, context):
         stage = event["requestContext"]["stage"]
         if stage == "test-invoke-stage":
             stage = "uat"
-        
+
         _check_authorization(event)
 
         params = dict(
