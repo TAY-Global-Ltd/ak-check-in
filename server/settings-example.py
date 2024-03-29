@@ -32,6 +32,11 @@ LAMBDA_FUNCTION_MAP = {
     'prod': 'ak-check-in-prod'
 }
 
+AK_CLASS_TIMETABLE_LAMBDA_MAP = {
+    "prod": "ak-class-timetable",
+    "uat": "ak-class-timetable-uat",
+}
+
 AWS_ACCOUNT=123456789
 
 API_GATEWAY_MAP = {

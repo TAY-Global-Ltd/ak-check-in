@@ -18,7 +18,7 @@ else
 endif
 
 build:
-	cp ak_user.py settings.py lambda_function.py test.py kms_utils.py cal_event.py build
+	cp ak_user.py settings.py lambda_function.py test.py kms_utils.py build
 
 test: build
 	@cd build && \

@@ -16,6 +16,7 @@ from settings import (
     PUB_NUB_CHANNEL_MAP,
     PUB_NUB_USER_ID,
     TABLE_MAP,
+    AK_CLASS_TIMETABLE_LAMBDA_MAP
 )
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
@@ -67,11 +68,6 @@ class Handler:
             "user_id": "demo-user@artillerykai.co.uk",
         }
         payload = json.dumps(payload).encode()
-
-        AK_CLASS_TIMETABLE_LAMBDA_MAP = {
-            "prod": "ak-class-timetable",
-            "uat": "ak-class-timetable-uat",
-        }
 
         res = client.invoke(
             FunctionName=AK_CLASS_TIMETABLE_LAMBDA_MAP[self.stage],
