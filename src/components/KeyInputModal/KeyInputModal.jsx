@@ -1,36 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import CryptoJS from "crypto-js";
 
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useCheckInContext } from "../../context/CheckInContext";
-import { encryptKey } from "../../utils/encrypt";
+import { encryptKey, key } from "../../utils/encrypt";
 import "./KeyInputModal.css";
 
 const KeyInputModal = ({ isOpen, onClose }) => {
-  const [key, setKey] = useState("");
+  const [keyToken, setKeyToken] = useState("");
   const [error, setError] = useState("");
   const { lightMode } = useCheckInContext();
   const queryClient = useQueryClient();
   const [masked, setMasked] = useState(true);
 
   const authToken = localStorage.getItem("authorization_token");
-  const hasAuthToken = localStorage.getItem("authorization_token") !== "null";
+  const hasAuthToken = localStorage.getItem("authorization_token") !== null;
+
+  useEffect(() => {
+    if (hasAuthToken) {
+      const bytes = CryptoJS.AES.decrypt(authToken, key, {
+        mode: CryptoJS.mode.ECB,
+      });
+      // Convert the decrypted bytes to a UTF-8 string
+      const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
+      setKeyToken(decryptedToken);
+    }
+  }, [hasAuthToken, authToken]);
 
   const toggleMask = () => {
     setMasked(!masked);
   };
 
   const handleChange = (e) => {
-    setKey(e.target.value);
+    setKeyToken(e.target.value);
   };
 
   const handleSave = async () => {
-    if (key.length < 3) {
+    if (keyToken.length < 3) {
       setError("Please enter minimum 3 characters!");
       return;
     }
 
-    const encryptedToken = encryptKey(key);
+    const encryptedToken = encryptKey(keyToken);
     localStorage.setItem("authorization_token", encryptedToken);
     queryClient.invalidateQueries("");
     onClose();
@@ -59,7 +71,7 @@ const KeyInputModal = ({ isOpen, onClose }) => {
         <div className="input-wrapper">
           <input
             type={masked ? "password" : "text"}
-            value={hasAuthToken ? authToken : key}
+            value={keyToken}
             onChange={handleChange}
             id="passwordInput"
             className={`key-input ${

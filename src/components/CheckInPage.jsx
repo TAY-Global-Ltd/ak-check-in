@@ -17,15 +17,13 @@ const CheckInPage = () => {
   const [showKeyModal, setShowKeyModal] = useState(false);
 
   useEffect(() => {
-    const hasAuthToken = localStorage.getItem("authorization_token") !== "null";
+    const hasAuthToken = localStorage.getItem("authorization_token") !== null;
     if (!hasAuthToken) {
       setShowKeyModal(true);
     }
 
     // show auth key modal if token invalid
     if (!!hasAuthToken && checkInError) {
-      // clear localStore
-      localStorage.setItem("authorization_token", null);
       setShowKeyModal(true);
     }
   }, [checkInError]);
