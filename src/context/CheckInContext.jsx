@@ -38,8 +38,6 @@ const CheckInProvider = ({ children }) => {
         return;
       }
 
-      console.log("~~~ message", message);
-
       const { status, "user-id": userId, event_id, ...userData } = message;
 
       if (status === "cancelled") {
@@ -82,7 +80,7 @@ const CheckInProvider = ({ children }) => {
   const removeUser = (userId, event_id) => {
     setStudents((prevStudents) =>
       prevStudents.filter(
-        (user) => user["user-id"] !== userId && user.event_id !== event_id
+        (user) => !(user["user-id"] === userId && user.event_id === event_id)
       )
     );
   };
