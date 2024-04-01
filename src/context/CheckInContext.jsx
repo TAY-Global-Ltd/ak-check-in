@@ -80,7 +80,7 @@ const CheckInProvider = ({ children }) => {
   const removeUser = (userId, event_id) => {
     setStudents((prevStudents) =>
       prevStudents.filter(
-        (user) => user["user-id"] !== userId && user.event_id !== event_id
+        (user) => !(user["user-id"] === userId && user.event_id === event_id)
       )
     );
   };
@@ -127,6 +127,7 @@ const CheckInProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["CheckInData"],
     queryFn: getCheckInData,
+    retry: 5,
   });
 
   const {
@@ -136,6 +137,7 @@ const CheckInProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["CurrentClassData"],
     queryFn: getCurrentClassData,
+    retry: 5,
   });
 
   const {
@@ -145,6 +147,7 @@ const CheckInProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["NextClassData"],
     queryFn: getNextClassData,
+    retry: 5,
   });
 
   // get initial data and sub to Pubnub
@@ -179,7 +182,7 @@ const CheckInProvider = ({ children }) => {
     }`);
   }
 
-  // refetch all data ince current class is over
+  // refetch all data once current class is over
   useEffect(() => {
     if (!!currentClassData) {
       if (isClassOver(currentClassData.end_time)) {
