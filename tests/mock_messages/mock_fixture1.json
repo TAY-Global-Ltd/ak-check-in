@@ -55,6 +55,16 @@
         },
         {
             "event_id": "event-1",
+            "user-id": "user0004b",
+            "name": "Boruto",
+            "parent_name": "Naruto",
+            "icon": "supervisor_account",
+            "icon_type": "material",
+            "reward": "",
+            "status": "signedup"
+        },
+        {
+            "event_id": "event-1",
             "user-id": "user0005",
             "name": "Uzumaki Naruto",
             "icon": "person",
