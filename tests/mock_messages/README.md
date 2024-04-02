@@ -129,6 +129,7 @@ Both initial state and messages sent to PubNub topic looks like this
   * event_id - The event id of the class which can be requested for more details from the request server
   * user-id - A unique user id which should not be email address or anything that would give away confidential information about the real person.
   * name - The name of the member, but should be an alias that the user has agree to display. Could just be a first name or some other nick name.
+  * parent_name - Optional field that is the name of the parent in case it is the parent that checks in the child.
   * icon - The icon to be displayed. The value would depend on icon_type
   * icon_type - The icon type, it can take the following values: ``url``, ``material`` or ``internal``
   * reward - The club can give rewards like most number of classes attended etc... typically this is a set of emojis.
