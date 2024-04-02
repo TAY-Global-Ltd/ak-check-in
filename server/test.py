@@ -111,7 +111,7 @@ def set_user(is_member=True):
     user.write()
 
 def test_signup():
-    # set_user()
+    set_user()
     event_id = _get_curr_event_id()
     event = {
         "stage": "uat",

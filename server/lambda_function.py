@@ -154,7 +154,7 @@ class Handler:
         if participant_id >= 0 and participant_id < len(participants):
             participant = participants[participant_id]
             user_id = f"{u.email()}!{participant_id}"
-            alias = participant["alias"]
+            alias = f"{participant['alias']} ({u.alias()})"
             icon = "supervisor_account"
         else:
             user_id = u.email()
