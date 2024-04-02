@@ -1,5 +1,5 @@
 import json
-from kms_utils import get_secret
+from lib.kms_utils import get_secret
 import kydb
 from logging import getLogger
 from datetime import date, timedelta, datetime

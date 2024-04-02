@@ -12,13 +12,15 @@ EXPECTED_VERSION=Python 3.12
 
 install:
 ifeq ($(PYTHON_VERSION), $(EXPECTED_VERSION))
+	mkdir -p build/lib && \
 	pip install -r requirements.txt --target build/ --upgrade
 else
 	@echo Incorrect python version. Expecting $(EXPECTED_VERSION)
 endif
 
 build:
-	cp ak_user.py settings.py lambda_function.py test.py kms_utils.py build
+	cp settings.py lambda_function.py test.py build && \
+	cp lib/*.py build/lib
 
 test: build
 	@cd build && \
