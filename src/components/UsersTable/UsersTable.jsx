@@ -69,6 +69,9 @@ const UsersTable = () => {
             <div className="name-wrapper">
               <p className="reward">{student.reward}</p>
               <p className="name">{student.name}</p>
+              {student?.parent_name && (
+                <p style={{ fontSize: "0.6em" }}>( {student?.parent_name} )</p>
+              )}
             </div>
           </div>
         );
