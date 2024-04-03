@@ -51,7 +51,7 @@ const useIncomingMessage = () => {
   const removeUser = (userId, event_id) => {
     setStudents((prevStudents) =>
       prevStudents.filter(
-        (user) => user["user-id"] !== userId && user.event_id !== event_id // Use AND condition to remove based on userId and event_id
+        (user) => !(user["user-id"] === userId && user.event_id === event_id) // Use AND condition to remove based on userId and event_id
       )
     );
   };
