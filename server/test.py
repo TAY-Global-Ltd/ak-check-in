@@ -32,12 +32,6 @@ def test_current_next_event():
 
 
 def test_initial_state():
-    h = lambda_function.Handler(db, stage)
-    events = h.initial_state()
-    pprint(events)
-
-
-def test_initial_state():
     event = {
         "path": "/initial_state",
         "requestContext": {
@@ -48,7 +42,7 @@ def test_initial_state():
 
     res = lambda_function.lambda_handler(event, None)
     body = json.loads(res["body"])
-    print(body)
+    pprint(body)
     expected = {"settings", "subscription_info", "attendees"}
     assert set(body.keys()) == expected
 

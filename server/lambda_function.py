@@ -134,7 +134,7 @@ class Handler:
     @expose
     def initial_state(self):
         today = self._today()
-        attendees = self._list(today, today + timedelta(days=1))
+        attendees = self._get_participants(today, today + timedelta(days=1))
 
         return {
             "settings": SETTINGS,
@@ -154,17 +154,20 @@ class Handler:
         if participant_id >= 0 and participant_id < len(participants):
             participant = participants[participant_id]
             user_id = f"{u.email()}!{participant_id}"
-            alias = f"{participant['alias']} ({u.alias()})"
+            name = participant['alias']
+            parent_name = u.alias()
             icon = "supervisor_account"
         else:
             user_id = u.email()
-            alias = u.alias()
+            name = u.alias()
+            parent_name = None
             icon = "person_check"
 
         return {
             "event_id": event_id,
             "user-id": user_id,
-            "name": alias,
+            "name": name,
+            "parent_name": parent_name,
             "icon": icon if u.is_full_member() else "person_cancel",
             "icon_type": "material",
             "reward": "⭐" * stars.get(u.email(), 0),
@@ -176,11 +179,9 @@ class Handler:
         res = requests.get(url, headers={"Teamup-Token": self.api_key})
         return res.json()["events"]
 
-    def _list(self, start_dt: date, end_dt: date):
+    def _get_participants(self, start_dt: date, end_dt: date):
         events = self._get_events(start_dt, end_dt)
         stars = self._get_stars()
-
-        res = []
 
         for event in events:
             users = {}
@@ -200,16 +201,18 @@ class Handler:
                 if "!" in user_id:
                     user_id, pid = user_id.split("!")
                     pid = int(pid)
+                else:
+                    pid = -1
 
                 u = self.db["/users/" + user_id]
                 users[key] = (u, pid, "checkedin")
 
-            res += [
+            return [
                 self._process_action(event_id, u, stars, s, pid)
                 for u, pid, s in users.values()
             ]
 
-        return res
+        raise KeyError(f"Cannot find any events between {start_dt} and {end_dt}")
 
     def _checkin_folder(self, evt_id, dt: date):
         return f"/checkins/{dt}/{evt_id}/"
