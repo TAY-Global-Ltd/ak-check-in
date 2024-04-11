@@ -183,6 +183,8 @@ class Handler:
         events = self._get_events(start_dt, end_dt)
         stars = self._get_stars()
 
+        res = []
+
         for event in events:
             users = {}
             event_id = event["id"]
@@ -207,12 +209,12 @@ class Handler:
                 u = self.db["/users/" + user_id]
                 users[key] = (u, pid, "checkedin")
 
-            return [
+            res += [
                 self._process_action(event_id, u, stars, s, pid)
                 for u, pid, s in users.values()
             ]
 
-        raise KeyError(f"Cannot find any events between {start_dt} and {end_dt}")
+        return res
 
     def _checkin_folder(self, evt_id, dt: date):
         return f"/checkins/{dt}/{evt_id}/"
