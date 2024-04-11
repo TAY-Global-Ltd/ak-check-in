@@ -50,10 +50,12 @@ const UsersTable = () => {
             key={index}
             className={`users-table ${
               isStudentCheckedIn ? "checked" : "unChecked"
-            } ${
-              lightMode
-                ? "light-bg-secondary light-box-shadow"
-                : "dark-bg-secondary dark-box-shadow"
+            } ${lightMode ? "light-bg-secondary" : "dark-bg-secondary"} ${
+              student.isSigned
+                ? "signed-and-checked"
+                : lightMode
+                ? "light-box-shadow"
+                : "dark-box-shadow"
             }`}
           >
             <span
