@@ -1,27 +1,29 @@
-import updateStudentStatus from "./studentSorting";
+import { updateStudentStatus } from "./studentSorting";
 
 // Test case for updateStudentStatus function
 describe("updateStudentStatus", () => {
   test("should update checkInStudents array and signUpStudents array correctly", () => {
     // Sample input arrays
-    const checkInStudents = [
+    const checkedInStudents = [
       { "user-id": 1, name: "John" },
       { "user-id": 2, name: "Jane" },
     ];
-    const signUpStudents = [
+    const signedUpStudents = [
       { "user-id": 1, name: "John" },
       { "user-id": 3, name: "Alice" },
     ];
 
     // Call the function
-    const { updatedCheckInStudents, updatedSignUpStudents } =
-      updateStudentStatus(checkInStudents, signUpStudents);
+    const { checkInStudents, signUpStudents } = updateStudentStatus(
+      checkedInStudents,
+      signedUpStudents
+    );
 
     // Assert the results
-    expect(updatedCheckInStudents).toEqual([
+    expect(checkInStudents).toEqual([
       { "user-id": 1, name: "John", isSigned: true },
       { "user-id": 2, name: "Jane", isSigned: undefined },
     ]);
-    expect(updatedSignUpStudents).toEqual([{ "user-id": 3, name: "Alice" }]);
+    expect(signUpStudents).toEqual([{ "user-id": 3, name: "Alice" }]);
   });
 });
