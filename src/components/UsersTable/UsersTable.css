@@ -3,7 +3,7 @@
   width: 90%;
   flex-wrap: wrap;
   justify-content: center;
-  align-content: center; 
+  align-content: center;
   gap: 20px 30px;
   margin: 0 auto;
   padding-bottom: 20px;
@@ -12,6 +12,10 @@
 .name {
   margin: 0;
   font-size: 1.2em;
+}
+
+.signed-and-checked {
+  box-shadow: 0 0 6px #008001;
 }
 
 .reward {
