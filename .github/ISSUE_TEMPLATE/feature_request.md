@@ -1,8 +1,3 @@
----
-name: Feature Request
-about: Suggest an idea for this project
----
-
 ### User Story Description
 
 [Provide a detailed description of the feature or enhancement you are proposing, following the User Story approach:

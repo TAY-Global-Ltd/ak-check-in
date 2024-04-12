@@ -1,8 +1,3 @@
----
-name: Pull Request
-about: Create a pull request to propose changes to the project
----
-
 ### Changes
 
 [Concisely summarize the changes introduced by this pull request.]
@@ -14,6 +9,14 @@ about: Create a pull request to propose changes to the project
 ### How to Test
 
 [Describe the ways are available to test the new changes and any steps that need to be taken for same.]
+
+### Tests Description ( if needed )
+
+[Add additional information on how and what you test here.]
+
+- [ ] Unittest covering new feature
+- [ ] Tested with Mock server
+- [ ] Tested with UAT server
 
 ### Checklist
 
