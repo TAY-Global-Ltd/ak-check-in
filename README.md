@@ -7,11 +7,9 @@ AK stands for [Artillery Kai](https://www.artillerykai.co.uk), the first gym tha
 This app is mainly a UI. It does require talking a server which is outside the scope of this repository.
 However there is a mock server and an example AWS Lambda function for reference.
 
-
-
 ## Installing packages
 
-Run:
+Run npm command:
 
 ```
 npm install
@@ -19,14 +17,14 @@ npm install
 
 ## Staring the webapp
 
-You'll need to set the envrionment variable ``REACT_APP_CHECKIN_API_SERVER_URL`` which points to the API server. 
-If it is not set, it'll be defaulted to the mock server. You can either put that in ``.env`` or explictly export it.
+You'll need to set the envrionment variable `REACT_APP_CHECKIN_API_SERVER_URL` which points to the API server.
+If it is not set, it'll be defaulted to the mock server. You can either put that in `.env` or explictly export it.
 
 ```
 export REACT_APP_CHECKIN_API_SERVER_URL=https://my.api.server.com/v1/
 ```
 
-If you are using the mock server please see ``tests/mock_messages/README.md``
+If you are using the mock server please see `tests/mock_messages/README.md`
 
 Now start the react dev server
 
@@ -38,7 +36,7 @@ The app should automatically pop up on your browswer. If not see the print to se
 
 ## Building
 
-Use the below to build the app into the ``build`` directory.
+Use the below to build the app into the `build` directory.
 
 ```
 npm run build
@@ -48,4 +46,4 @@ npm run build
 
 There are some example deployment script. But most likely you will be using your own.
 
-See ``deploy.py``
+See `deploy.py`
