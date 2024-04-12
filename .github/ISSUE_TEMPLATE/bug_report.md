@@ -1,3 +1,8 @@
+---
+name: Bug Report
+about: Create a report to help us improve
+---
+
 ### Bug Description
 
 [Concisely summarize the issue or bug you encountered.]
