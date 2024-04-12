@@ -1,8 +1,3 @@
----
-name: Bug Report
-about: Create a report to help us improve
----
-
 ### Bug Description
 
 [Concisely summarize the issue or bug you encountered.]
@@ -39,10 +34,6 @@ about: Create a report to help us improve
 
 [Include any additional information that may be relevant to the bug report, such as workarounds, related issues, or proposed solutions.]
 
-### Assignees
-
-[Specify who should be assigned to address this bug report, if known.]
-
 ### Labels
 
-[Add any relevant labels to categorize and prioritize the bug report, such as bug, error, etc.]
+[Add BUG label]
