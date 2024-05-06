@@ -1,16 +1,11 @@
 {
   "short_name": "AK Check In",
-  "name": "Artillery Kai Check In",
+  "name": "AK Check In",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "64x64 32x32 24x24 16x16 192x192 256x256",
       "type": "image/x-icon"
-    },
-    {
-      "src": "utils/logos/ak-logo-192x192.png",
-      "type": "image/png",
-      "sizes": "192x192"
     },
     {
       "src": "utils/logos/ak-logo-512x512.png",
@@ -20,6 +15,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "id": "ArtilleryKaiCheckIn",
   "background_color": "#000000"
 }
