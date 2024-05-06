@@ -29,7 +29,7 @@ export const useCheckInContext = () => {
 const CheckInProvider = ({ children }) => {
   const { message, handleMessage } = usePubNubMessage();
   const [students, setStudents] = useState([]);
-  const [lightMode, setLightMode] = useState(false);
+  const [lightMode, setLightMode] = useState(true);
   const queryClient = useQueryClient();
 
   const handleIncomingMessage = useCallback(
@@ -127,7 +127,7 @@ const CheckInProvider = ({ children }) => {
   } = useQuery({
     queryKey: ["CheckInData"],
     queryFn: getCheckInData,
-    retry: 5,
+    retry: 4,
   });
 
   const {
