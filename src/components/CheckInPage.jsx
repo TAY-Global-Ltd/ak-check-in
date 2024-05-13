@@ -6,8 +6,8 @@ import Clock from "./Clock";
 import Modal from "./ModalMessage/Modal";
 import CurrentClass from "./CurrentClass/CurrentClass";
 import { useCheckInContext } from "../context/CheckInContext";
-import lightBackground from "../assets/ak-light-bg.png";
-import darkBackground from "../assets/ak-background.png";
+import lightBackground from "../assets/diesel_ak_light_bg.png";
+import darkBackground from "../assets/diesel_ak_bg.png";
 import KeyInputModal from "./KeyInputModal/KeyInputModal";
 import "../global.css";
 

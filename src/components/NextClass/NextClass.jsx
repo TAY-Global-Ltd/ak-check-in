@@ -4,6 +4,7 @@ import {
   filterStudentsByClass,
   checkStudentsStatus,
 } from "../../utils/studentSorting";
+import logo from "../../assets/diesel_ak_logo_tran.png";
 import Clock from "../Clock";
 
 const NextClass = () => {
@@ -31,11 +32,11 @@ const NextClass = () => {
         }`}
       >
         <img
-          src={icon}
+          src={icon ? icon : logo}
           style={{
             width: "30px",
             marginTop: "6px",
-            height: icon ? "" : "30px",
+            height: "30px",
           }}
           alt="next class icon"
         />
