@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCheckInContext } from "../context/CheckInContext";
+import logo from "../assets/diesel_ak_logo_tran.png";
 import "../App.css";
 
 const Clock = () => {
@@ -36,11 +37,7 @@ const Clock = () => {
           : "dark-bg-primary dark-box-shadow"
       }`}
     >
-      <img
-        src={checkInData?.settings.icon}
-        className="logo"
-        alt="ak-logo"
-      />
+      <img src={logo} className="logo" alt="diesel AK logo" />
       <h4 style={{ margin: "0" }}>
         <span>{timeParts[0]}:</span>
         <span>{timeParts[1]}:</span>
