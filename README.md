@@ -1,8 +1,8 @@
-# ak-check-in
+# diesel-ak-check-in
 
 A system used for a gym to display who has checked in.
 
-AK stands for [Artillery Kai](https://www.artillerykai.co.uk), the first gym that will be using this app.
+AK stands for [Artillery Kai](https://www.dieselak.co.uk/), the first gym that will be using this app.
 
 This app is mainly a UI. It does require talking a server which is outside the scope of this repository.
 However there is a mock server and an example AWS Lambda function for reference.
