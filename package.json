@@ -1,6 +1,6 @@
 {
   "homepage": "https://tayglobal.github.io/ak-check-in",
-  "name": "ak-check-in",
+  "name": "diesel-ak-check-in",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

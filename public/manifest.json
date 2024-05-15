@@ -1,6 +1,6 @@
 {
-  "short_name": "AK Check In",
-  "name": "AK Check In",
+  "short_name": "Check In",
+  "name": "Check In",
   "icons": [
     {
       "src": "favicon.ico",
@@ -15,6 +15,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "id": "ArtilleryKaiCheckIn",
+  "id": "DieselAKCheckIn",
   "background_color": "#000000"
 }
