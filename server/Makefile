@@ -5,7 +5,7 @@ FILENAME=$(LAMBDA_NAME).zip
 AWSCLI=awscliv2
 AWS_LAMBDA=$(AWSCLI) lambda
 PYTHON_VERSION:=$(shell python --version | cut -d. -f1,2)
-EXPECTED_VERSION=Python 3.12
+EXPECTED_VERSION=Python 3.14
 
 
 .PHONY: install build test deploy test-remote clean all
@@ -13,9 +13,9 @@ EXPECTED_VERSION=Python 3.12
 install:
 ifeq ($(PYTHON_VERSION), $(EXPECTED_VERSION))
 	mkdir -p build/lib && \
-	pip install -r requirements.txt --target build/ --upgrade
+	uv pip install -r requirements.txt --target build/ --python-version 3.14 --python-platform x86_64-manylinux_2_28 --upgrade
 else
-	@echo Incorrect python version. Expecting $(EXPECTED_VERSION)
+	@echo Incorrect python version. Expecting $(EXPECTED_VERSION) && false
 endif
 
 build:
