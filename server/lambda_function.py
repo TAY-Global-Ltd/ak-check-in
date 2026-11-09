@@ -1,4 +1,5 @@
 import json
+import settings
 from lib.kms_utils import get_secret
 import kydb
 from logging import getLogger
@@ -24,6 +25,26 @@ from typing import Optional
 import boto3
 
 TIME_ZONE = pytz.timezone(TIME_ZONE_NAME)
+
+# The gym a user_action is for selects its store, the same way ak-server's
+# lib/gym_config.DB_SUFFIX does: each gym's users and stars live under the
+# gym's prefix of the stage table (e.g. /diesel_gym/users/<id>). Keep the two
+# in step; settings.GYM_DB_SUFFIX overrides it.
+DEFAULT_GYM_ID = "diesel_ak"
+GYM_DB_SUFFIX = getattr(
+    settings,
+    "GYM_DB_SUFFIX",
+    {
+        DEFAULT_GYM_ID: "",
+        "diesel_gym": "/diesel_gym",
+        "diesel_gym_tokyo": "/diesel_gym_tokyo",
+        "diesel_gym_essex": "/diesel_gym_essex",
+        "gracie_barra_chelmsford": "/gracie_barra_chelmsford",
+        "gracie_barra_maldon": "/gracie_barra_maldon",
+        "iga_academy": "/iga_academy",
+        "igs_academy": "/igs_academy",
+    },
+)
 
 logger = getLogger(__name__)
 
@@ -53,11 +74,30 @@ def is_exposed(f):
 
 
 class Handler:
-    def __init__(self, db, stage):
+    def __init__(self, db, stage, connect=None):
         self.api_key = TEAMUP_API_KEY
         self.db = db
         self.stage = stage
         self.check_in_minutes_before = 15
+        # url -> kydb connection; the per-gym stores are opened on demand.
+        self._connect = connect or _connect_db
+        self._gym_dbs = {}
+
+    def _gym_db(self, gym_id):
+        """The store of ``gym_id`` (the default gym's is ``self.db``), or
+        ``None`` if the gym is not configured."""
+        if not gym_id or gym_id == DEFAULT_GYM_ID:
+            return self.db
+        suffix = GYM_DB_SUFFIX.get(gym_id)
+        if suffix is None:
+            return None
+        if not suffix:
+            return self.db
+        if gym_id not in self._gym_dbs:
+            self._gym_dbs[gym_id] = self._connect(
+                "dynamodb://" + TABLE_MAP[self.stage] + suffix
+            )
+        return self._gym_dbs[gym_id]
 
     def _signed_ups(self, event_id):
         client = boto3.client("lambda")
@@ -146,8 +186,12 @@ class Handler:
             "attendees": attendees,
         }
 
-    def _get_stars(self):
-        return self.db["/rewards/stars"]
+    def _get_stars(self, db=None):
+        db = self.db if db is None else db
+        try:
+            return db["/rewards/stars"]
+        except KeyError:
+            return {}
 
     def _process_action(self, event_id, u, stars, status, participant_id):
         participants = u.additional_participants()
@@ -244,9 +288,38 @@ class Handler:
         return res.json()["event"]
 
     @expose
-    def user_action(self, event_id, status, user_id, participant_id: int = -1):
-        u = self.db["/users/" + user_id]
-        stars = self._get_stars()
+    def user_action(
+        self, event_id, status, user_id, participant_id: int = -1, gym_id=None
+    ):
+        """Publish a sign-up/check-in/cancel to the live feed.
+
+        ``gym_id`` (sent by ak-class-timetable) selects the store the user and
+        stars are read from; absent means the default gym. An unknown gym or a
+        user missing from the store is logged at WARNING and skipped: this is
+        invoked asynchronously, so raising only made Lambda retry it.
+        """
+        db = self._gym_db(gym_id)
+        if db is None:
+            logger.warning(
+                "user_action: unknown gym_id %r for %s on %s; skipped",
+                gym_id,
+                user_id,
+                event_id,
+            )
+            return None
+        path = "/users/" + user_id
+        try:
+            u = db[path]
+        except KeyError:
+            logger.warning(
+                "user_action: no user %s in gym %s; skipped %s on %s",
+                path,
+                gym_id or DEFAULT_GYM_ID,
+                status,
+                event_id,
+            )
+            return None
+        stars = self._get_stars(db)
 
         message = self._process_action(event_id, u, stars, status, participant_id)
         print(f"Sending message: {message}")
@@ -265,6 +338,12 @@ class Handler:
             print("Publish time: %d" % envelope.result.timetoken)
         except Exception as e:
             print("Error: %s" % e)
+
+
+def _connect_db(url):
+    db = kydb.connect(url)
+    db._cache = {}
+    return db
 
 
 def get_params(event, key):
@@ -307,9 +386,10 @@ def lambda_handler(event, context):
             raise ValueError("Method not allowed")
 
         params = get_params(event, "kwargs")
+        if event.get("gym_id") and "gym_id" not in params:
+            params["gym_id"] = event["gym_id"]
 
-    db = kydb.connect(f"dynamodb://" + TABLE_MAP[stage])
-    db._cache = {}
+    db = _connect_db(f"dynamodb://" + TABLE_MAP[stage])
     h = Handler(db, stage)
 
     f = getattr(h, method)

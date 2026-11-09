@@ -8,7 +8,7 @@ PYTHON_VERSION:=$(shell python --version | cut -d. -f1,2)
 EXPECTED_VERSION=Python 3.14
 
 
-.PHONY: install build test deploy test-remote clean all
+.PHONY: install build test unittest deploy test-remote clean all
 
 install:
 ifeq ($(PYTHON_VERSION), $(EXPECTED_VERSION))
@@ -25,6 +25,9 @@ build:
 test: build
 	@cd build && \
 	PYTHONPATH=. python test.py $(AUTH_HEADER)
+
+unittest:
+	python -m pytest tests -q
 
 deploy: build
 	cd build && \

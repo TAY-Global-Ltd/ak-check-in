@@ -5,3 +5,5 @@ pytz
 pubnub
 termcolor
 click
+pytest
+python-dateutil
