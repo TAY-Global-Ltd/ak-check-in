@@ -123,3 +123,6 @@ The React app is unchanged. Only the `server/` Lambda deploys.
 4. Follow-up from F3, still open: add the `server-unittest` CI job (it needs a token with `workflow` scope).
 
 ## Merge commit
+
+`effb578` "Merge worker/checkin-live-patch" on samurai-claw (parents 3f78848 and the worker head). Deploy from this commit
+or later.
