@@ -43,6 +43,9 @@ GYM_DB_SUFFIX = getattr(
         "gracie_barra_maldon": "/gracie_barra_maldon",
         "iga_academy": "/iga_academy",
         "igs_academy": "/igs_academy",
+        # ak-server's smoke-test demo gym: its smoke users sign up and check
+        # in too, so their notifications must not be skipped as unknown.
+        "kakuto_demo": "/kakuto_demo",
     },
 )
 
