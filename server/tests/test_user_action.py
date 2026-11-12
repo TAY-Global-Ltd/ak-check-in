@@ -79,13 +79,9 @@ def make_handler(stores):
 
 
 def published(pubnub):
-    # user_action publishes each message twice (an existing quirk); compare
-    # the distinct messages.
-    seen = []
-    for m in pubnub.messages:
-        if m not in seen:
-            seen.append(m)
-    return seen
+    # user_action publishes each message exactly once (the live 2026-10-10
+    # fix); callers unpack a one-item list, so a second publish fails them.
+    return list(pubnub.messages)
 
 
 def test_default_gym_reads_the_root_store(stores, pubnub):

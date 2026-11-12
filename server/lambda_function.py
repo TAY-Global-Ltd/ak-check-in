@@ -17,10 +17,14 @@ from settings import (
     PUB_NUB_CHANNEL_MAP,
     PUB_NUB_USER_ID,
     TABLE_MAP,
-    AK_CLASS_TIMETABLE_LAMBDA_MAP
+    AK_CLASS_TIMETABLE_LAMBDA_MAP,
 )
-from pubnub.pnconfiguration import PNConfiguration
-from pubnub.pubnub import PubNub
+try:
+    from pubnub.pnconfiguration import PNConfiguration
+    from pubnub.pubnub import PubNub
+except ImportError:
+    PNConfiguration = None
+    PubNub = None
 from typing import Optional
 import boto3
 
@@ -51,16 +55,31 @@ GYM_DB_SUFFIX = getattr(
 
 logger = getLogger(__name__)
 
-TEAMUP_API_KEY = get_secret("TEAMUP_API_KEY")
+try:
+    TEAMUP_API_KEY = get_secret("TEAMUP_API_KEY")
+except Exception as e:
+    logger.warning("Could not load TEAMUP_API_KEY: %s", e)
+    TEAMUP_API_KEY = None
 
-pnconfig = PNConfiguration()
+if PNConfiguration:
+    pnconfig = PNConfiguration()
+    try:
+        pnconfig.subscribe_key = get_secret("PUB_NUB_SUBSCRIBE_KEY")
+        pnconfig.publish_key = get_secret("PUB_NUB_PUBLISH_KEY")
+        pnconfig.user_id = PUB_NUB_USER_ID
+        pubnub = PubNub(pnconfig)
+    except Exception as e:
+        logger.warning("Could not initialize PubNub: %s", e)
+        pubnub = None
+else:
+    pnconfig = None
+    pubnub = None
 
-pnconfig.subscribe_key = get_secret("PUB_NUB_SUBSCRIBE_KEY")
-pnconfig.publish_key = get_secret("PUB_NUB_PUBLISH_KEY")
-pnconfig.user_id = PUB_NUB_USER_ID
-pubnub = PubNub(pnconfig)
-
-AUTHORIZATION_TOKEN = get_secret("AUTHORIZATION_TOKEN")
+try:
+    AUTHORIZATION_TOKEN = get_secret("AUTHORIZATION_TOKEN")
+except Exception as e:
+    logger.warning("Could not load AUTHORIZATION_TOKEN: %s", e)
+    AUTHORIZATION_TOKEN = None
 
 
 class AuthorizationError(Exception):
@@ -102,6 +121,18 @@ class Handler:
             )
         return self._gym_dbs[gym_id]
 
+    def _is_kakuto(self) -> bool:
+        try:
+            if hasattr(self.db, "exists"):
+                if not self.db.exists("/configs/timetable"):
+                    return False
+            elif "/configs/timetable" not in self.db:
+                return False
+            cfg = self.db["/configs/timetable"]
+            return isinstance(cfg, dict) and cfg.get("provider") == "kakuto"
+        except Exception:
+            return False
+
     def _signed_ups(self, event_id):
         client = boto3.client("lambda")
         payload = {
@@ -124,18 +155,23 @@ class Handler:
 
     @staticmethod
     def _get_icon(sub_calendar_id):
-        return CAL_EVENT_ICON_BASE_FOLDER + CAL_EVENT_ICON_MAP[sub_calendar_id]
+        icon = CAL_EVENT_ICON_MAP.get(sub_calendar_id, "default.png")
+        return CAL_EVENT_ICON_BASE_FOLDER + icon
 
     @classmethod
     def _format_cal_event(cls, event: dict) -> dict:
-        start_dt = datetime.fromisoformat(event["start_dt"])
-        end_dt = datetime.fromisoformat(event["end_dt"])
-        sub_cal = event["subcalendar_id"]
+        start_dt = event["start_dt"]
+        if isinstance(start_dt, str):
+            start_dt = parser.parse(start_dt)
+        end_dt = event["end_dt"]
+        if isinstance(end_dt, str):
+            end_dt = parser.parse(end_dt)
+        sub_cal = event.get("subcalendar_id")
 
         return {
             "id": event["id"],
-            "title": CAL_EVENT_TITLE[sub_cal],
-            "description": event["title"],
+            "title": CAL_EVENT_TITLE.get(sub_cal, event.get("title", "Class")),
+            "description": event.get("title", ""),
             "start_time": start_dt.strftime("%H:%M"),
             "end_time": end_dt.strftime("%H:%M"),
             "icon": cls._get_icon(sub_cal),
@@ -146,9 +182,18 @@ class Handler:
     def current_event(self, now: Optional[datetime] = None) -> dict:
         if now is None:
             now = datetime.now(TIME_ZONE)
+        else:
+            if isinstance(now, str):
+                now = parser.parse(now)
+            if now.tzinfo is None:
+                now = TIME_ZONE.localize(now)
         today = now.date()
         for event in self._get_events(today, today + timedelta(days=2)):
-            end_dt = parser.parse(event["end_dt"])
+            end_dt = event["end_dt"]
+            if isinstance(end_dt, str):
+                end_dt = parser.parse(end_dt)
+            if end_dt.tzinfo is None:
+                end_dt = TIME_ZONE.localize(end_dt)
             if now <= end_dt:
                 print(now, end_dt)
                 return self._format_cal_event(event)
@@ -162,10 +207,19 @@ class Handler:
         # See: https://github.com/tayglobal/ak-check-in/issues/54
         if now is None:
             now = datetime.now(TIME_ZONE)
+        else:
+            if isinstance(now, str):
+                now = parser.parse(now)
+            if now.tzinfo is None:
+                now = TIME_ZONE.localize(now)
         today = now.date()
         found_current = False
         for event in self._get_events(today, today + timedelta(days=2)):
-            end_dt = parser.parse(event["end_dt"])
+            end_dt = event["end_dt"]
+            if isinstance(end_dt, str):
+                end_dt = parser.parse(end_dt)
+            if end_dt.tzinfo is None:
+                end_dt = TIME_ZONE.localize(end_dt)
             if now < end_dt:
                 if found_current:
                     return self._format_cal_event(event)
@@ -182,7 +236,7 @@ class Handler:
         return {
             "settings": SETTINGS,
             "subscription_info": {
-                "subscribe_key": pnconfig.subscribe_key,
+                "subscribe_key": pnconfig.subscribe_key if pnconfig else "",
                 "user_id": PUB_NUB_USER_ID,
                 "channel": PUB_NUB_CHANNEL_MAP[self.stage],
             },
@@ -201,7 +255,7 @@ class Handler:
         if participant_id >= 0 and participant_id < len(participants):
             participant = participants[participant_id]
             user_id = f"{u.email()}!{participant_id}"
-            name = participant['alias']
+            name = participant["alias"]
             parent_name = u.alias()
             icon = "supervisor_account"
         else:
@@ -222,6 +276,49 @@ class Handler:
         }
 
     def _get_events(self, start_dt: date, end_dt: date):
+        if self._is_kakuto():
+            # Try provider abstraction if available
+            try:
+                from calendar_provider import make_provider
+
+                provider = make_provider(self.db, self.stage)
+                return provider.get_events(start_dt, end_dt)
+            except (ImportError, Exception) as e:
+                logger.info(
+                    "Provider abstraction not available (%s), using lambda invocation",
+                    e,
+                )
+
+            client = boto3.client("lambda")
+            payload = {
+                "stage": self.stage,
+                "method": "get_classes",
+                "kwargs": {
+                    "start_date": str(start_dt),
+                    "end_date": str(end_dt),
+                    "include_num_attendees": False,
+                },
+                "user_id": "demo-user@artillerykai.co.uk",
+            }
+            res = client.invoke(
+                FunctionName=AK_CLASS_TIMETABLE_LAMBDA_MAP[self.stage],
+                InvocationType="RequestResponse",
+                Payload=json.dumps(payload).encode(),
+            )
+            raw_payload = res["Payload"].read()
+            resp_body = json.loads(raw_payload)
+            if isinstance(resp_body, dict) and "body" in resp_body:
+                data = (
+                    json.loads(resp_body["body"])
+                    if isinstance(resp_body["body"], str)
+                    else resp_body["body"]
+                )
+            else:
+                data = resp_body
+            if isinstance(data, dict) and "events" in data:
+                return data["events"]
+            return data
+
         url = f"{CAL_BASE_URL}/events?startDate={start_dt}&endDate={end_dt}"
         res = requests.get(url, headers={"Teamup-Token": self.api_key})
         return res.json()["events"]
@@ -238,11 +335,17 @@ class Handler:
             signups = self._signed_ups(event_id)
 
             for su in signups:
-                u = self.db["/users/" + su['email']]
-                pid = su['participant_id']
-                users[f"{u.email()}!{pid}"] = (u, pid, "signedup")
+                u = self.db["/users/" + su["email"]]
+                pid = su["participant_id"]
+                key = f"{u.email()}!{pid}" if pid >= 0 else u.email()
+                users[key] = (u, pid, "signedup")
 
-            dt = parser.parse(event["start_dt"]).date()
+            start_dt_val = event["start_dt"]
+            dt = (
+                parser.parse(start_dt_val).date()
+                if isinstance(start_dt_val, str)
+                else start_dt_val.date()
+            )
             folder = self._checkin_folder(event_id, dt)
 
             for user_id in self.db.ls(folder):
@@ -250,11 +353,15 @@ class Handler:
                 if "!" in user_id:
                     user_id, pid = user_id.split("!")
                     pid = int(pid)
+                    if pid < 0:
+                        key = user_id
                 else:
                     pid = -1
 
                 u = self.db["/users/" + user_id]
                 users[key] = (u, pid, "checkedin")
+                if pid < 0 and f"{user_id}!-1" in users and key != f"{user_id}!-1":
+                    del users[f"{user_id}!-1"]
 
             res += [
                 self._process_action(event_id, u, stars, s, pid)
@@ -267,9 +374,14 @@ class Handler:
         return f"/checkins/{dt}/{evt_id}/"
 
     def _find_check_in_windows(self):
-        dt = datetime.now(TIME_ZONE).today()
+        dt = self._today()
         for evt in self._get_events(dt, dt):
-            start_dt, end_dt = [parser.parse(evt[x]) for x in ("start_dt", "end_dt")]
+            start_dt = evt["start_dt"]
+            if isinstance(start_dt, str):
+                start_dt = parser.parse(start_dt)
+            end_dt = evt["end_dt"]
+            if isinstance(end_dt, str):
+                end_dt = parser.parse(end_dt)
             evt["check_in_window"] = (
                 start_dt - timedelta(minutes=self.check_in_minutes_before),
                 end_dt,
@@ -285,8 +397,45 @@ class Handler:
         return res
 
     def _get_event(self, event_id):
-        url = f"{CAL_BASE_URL}/events/{event_id}"
+        if self._is_kakuto():
+            try:
+                from calendar_provider import make_provider
 
+                provider = make_provider(self.db, self.stage)
+                return provider.get_event(event_id)
+            except (ImportError, Exception) as e:
+                logger.info(
+                    "Provider abstraction not available (%s), using lambda invocation",
+                    e,
+                )
+
+            client = boto3.client("lambda")
+            payload = {
+                "stage": self.stage,
+                "method": "get_events",
+                "kwargs": {"event_ids": [event_id]},
+                "user_id": "demo-user@artillerykai.co.uk",
+            }
+            res = client.invoke(
+                FunctionName=AK_CLASS_TIMETABLE_LAMBDA_MAP[self.stage],
+                InvocationType="RequestResponse",
+                Payload=json.dumps(payload).encode(),
+            )
+            raw_payload = res["Payload"].read()
+            resp_body = json.loads(raw_payload)
+            if isinstance(resp_body, dict) and "body" in resp_body:
+                data = (
+                    json.loads(resp_body["body"])
+                    if isinstance(resp_body["body"], str)
+                    else resp_body["body"]
+                )
+            else:
+                data = resp_body
+            if isinstance(data, list) and data:
+                return data[0]
+            raise ValueError(f"Event {event_id} not found")
+
+        url = f"{CAL_BASE_URL}/events/{event_id}"
         res = requests.get(url, headers={"Teamup-Token": self.api_key})
         return res.json()["event"]
 
@@ -327,20 +476,17 @@ class Handler:
         message = self._process_action(event_id, u, stars, status, participant_id)
         print(f"Sending message: {message}")
 
-        pubnub.publish().channel(PUB_NUB_CHANNEL_MAP[self.stage]).message(
-            message
-        ).sync()
-
-        try:
-            envelope = (
-                pubnub.publish()
-                .channel(PUB_NUB_CHANNEL_MAP[self.stage])
-                .message(message)
-                .sync()
-            )
-            print("Publish time: %d" % envelope.result.timetoken)
-        except Exception as e:
-            print("Error: %s" % e)
+        if pubnub is not None:
+            try:
+                envelope = (
+                    pubnub.publish()
+                    .channel(PUB_NUB_CHANNEL_MAP[self.stage])
+                    .message(message)
+                    .sync()
+                )
+                print("Publish time: %d" % envelope.result.timetoken)
+            except Exception as e:
+                print("Error: %s" % e)
 
 
 def _connect_db(url):
@@ -385,7 +531,7 @@ def lambda_handler(event, context):
         # Internal only not exposed
         stage = event["stage"]
         method = event["method"]
-        if method not in {"user_action"}:
+        if method not in {"user_action", "current_event", "next_event", "initial_state"}:
             raise ValueError("Method not allowed")
 
         params = get_params(event, "kwargs")
